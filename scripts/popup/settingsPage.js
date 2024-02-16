@@ -73,7 +73,16 @@ function initializeSettingsPage() {
     settingsSlider.min = value.min;
     settingsSlider.max = value.max;
     settingsSlider.step = 1;
-    settingsSlider.value = (SETTINGS[key] - TIMER_PADDING) / 60 / 1000;
+
+    // Set initial value
+    switch (value.type) {
+      case "mins":
+        settingsSlider.value = (SETTINGS[key] - TIMER_PADDING) / 60 / 1000;
+        break;
+      case "rounds":
+        settingsSlider.value = SETTINGS[key];
+        break;
+    }
 
     updateSettingsSlider();
     settingsSlider.addEventListener("input", async () => {

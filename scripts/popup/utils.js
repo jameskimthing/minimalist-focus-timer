@@ -140,10 +140,18 @@ function adjustPlayPauseButton(paused) {
 }
 
 let lastAdjustSessionRound;
+let lastAdjustMaxSessionRound;
 const sessionRound = document.getElementById("sessionCurrentRound");
-function adjustSessionRound(currentSessionRound) {
-  if (lastAdjustSessionRound === currentSessionRound) return;
+function adjustSessionRound(currentSessionRound, maxSessionRounds) {
+  if (
+    lastAdjustSessionRound === currentSessionRound &&
+    lastAdjustMaxSessionRound === maxSessionRounds
+  ) {
+    return;
+  }
   lastAdjustSessionRound = currentSessionRound;
+  lastAdjustMaxSessionRound = maxSessionRounds;
+  console.log(SETTINGS);
 
-  sessionRound.innerText = `${currentSessionRound} / ${SETTINGS.sessionRounds}`;
+  sessionRound.innerText = `${currentSessionRound} / ${maxSessionRounds}`;
 }

@@ -13,8 +13,13 @@
         "offscreen"
     ],
     "action": {
-        "default_popup": "index.html",
-        "default_icon": "default.png"
+        "default_popup": "index.html"
+    },
+    "icons": {
+        "32": "assets/icons/32.png",
+        "48": "assets/icons/48.png",
+        "96": "assets/icons/96.png",
+        "128": "assets/icons/128.png"
     },
     "web_accessible_resources": [
         {

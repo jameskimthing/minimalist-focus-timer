@@ -110,8 +110,6 @@ function receiveMessageFromPopup(message, sender, sendResponse) {
         sendResponse(STATE);
         break;
       case "update_settings":
-        // this only happens 1 by 1
-        const oldSessionRounds = SETTINGS.sessionRounds;
         Object.assign(SETTINGS, message.content);
         await setStorage("SETTINGS", SETTINGS);
 
@@ -128,10 +126,7 @@ function receiveMessageFromPopup(message, sender, sendResponse) {
             break;
         }
 
-        // Reset only if the change wasnt from session rounds change
-        if (oldSessionRounds !== SETTINGS.sessionRounds) {
-          STATE.softReset();
-        }
+        STATE.softReset();
         sendResponse();
         break;
       case "update_state":
