@@ -151,7 +151,6 @@ function adjustSessionRound(currentSessionRound, maxSessionRounds) {
   }
   lastAdjustSessionRound = currentSessionRound;
   lastAdjustMaxSessionRound = maxSessionRounds;
-  console.log(SETTINGS);
 
   sessionRound.innerText = `${currentSessionRound} / ${maxSessionRounds}`;
 }

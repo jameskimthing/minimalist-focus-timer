@@ -1,18 +1,18 @@
 const settingsFormInputsSettings = {
   workSessionLength: {
-    name: "Work Session Length",
+    name: "Focus Time Length",
     min: 1,
     max: 120,
     type: "mins",
   },
   breakSessionLength: {
-    name: "Break Session Length",
+    name: "Break Time Length",
     min: 1,
     max: 60,
     type: "mins",
   },
   longBreakSessionLength: {
-    name: "Long Break Session Length",
+    name: "Long Break Time Length",
     min: 1,
     max: 60,
     type: "mins",

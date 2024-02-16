@@ -13,13 +13,9 @@
   Object.assign(SETTINGS, settings);
   Object.assign(STATE, state);
 
-  console.log("NEW_SETTINGS: " + JSON.stringify(SETTINGS));
-
   initializeSettingsPage();
-  console.log("after settings page: " + JSON.stringify(SETTINGS));
 
   adjustUiToState();
-  console.log("after initial update: " + JSON.stringify(SETTINGS));
   function updateTimerUi() {
     if (STATE.isFinished) return requestAnimationFrame(updateTimerUi);
     if (STATE.isPaused)

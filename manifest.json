@@ -1,8 +1,8 @@
 {
     "manifest_version": 3,
-    "name": "Simple Pomodoro Focus",
+    "name": "Pomodoro Focus Timer",
     "description": "A minimalist Pomodoro Timer extension",
-    "version": "0.1",
+    "version": "0.2",
     "background": {
         "service_worker": "scripts/background/bgLoader.js"
     },
