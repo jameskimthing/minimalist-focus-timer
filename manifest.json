@@ -1,0 +1,27 @@
+{
+    "manifest_version": 3,
+    "name": "Simple Pomodoro Focus",
+    "description": "A minimalist Pomodoro Timer extension",
+    "version": "0.1",
+    "background": {
+        "service_worker": "scripts/background/bgLoader.js"
+    },
+    "permissions": [
+        "alarms",
+        "storage",
+        "notifications",
+        "offscreen"
+    ],
+    "action": {
+        "default_popup": "index.html",
+        "default_icon": "default.png"
+    },
+    "web_accessible_resources": [
+        {
+            "resources": [],
+            "matches": [
+                "<all_urls>"
+            ]
+        }
+    ]
+}

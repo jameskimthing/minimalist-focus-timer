@@ -1,0 +1,55 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" type="text/css" href="styles/styles.css" />
+    <link rel="stylesheet" type="text/css" href="styles/timer.css" />
+    <link rel="stylesheet" type="text/css" href="styles/settings.css" />
+  </head>
+  <body>
+    <!-- Timer -->
+    <div class="circle-container-outer">
+      <!-- Circle drawing -->
+      <svg class="circle-container-inner">
+        <circle id="partialCircleBackground" cx="123px" cy="123px" r="120px" />
+        <circle id="partialCircle" cx="123px" cy="123px" r="120px" />
+      </svg>
+
+      <!-- Text in the center of circle drawing -->
+      <div class="circle-text-container">
+        <div id="sessionLabel"></div>
+        <div id="sessionTimeLeft"></div>
+
+        <div class="circle-text-session-rounds-container">
+          <div id="sessionCurrentRound"></div>
+          <div>sessions</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Timer Controls -->
+    <div class="timer-controls-container">
+      <div id="timerPlayPauseButton"></div>
+      <!-- src="assets/icons/play.svg"></div> -->
+      <div id="timerResetButton"></div>
+      <!-- src="assets/icons/reset.svg"></div> -->
+    </div>
+
+    <div id="settingsPageButton"></div>
+    <!-- src="assets/icons/settings.svg" /> -->
+
+    <!-- Settings Page -->
+    <div id="settingsPage">
+      <form id="settingsForm">
+        <!-- Items to be added here by settingsPage.js -->
+      </form>
+    </div>
+  </body>
+
+  <script src="scripts/popup/values.js"></script>
+  <script src="scripts/popup/utils.js"></script>
+  <script src="scripts/popup/settingsPage.js"></script>
+  <script src="scripts/popup/buttons.js"></script>
+  <script src="scripts/popup/index.js"></script>
+</html>

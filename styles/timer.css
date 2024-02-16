@@ -1,0 +1,117 @@
+/* 
+---------------------------------------------------------------------------------------------------------------------------------
+CIRCLE DRAWING ------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------------------------
+*/
+.circle-container-outer {
+  position: relative;
+}
+
+.circle-container-inner {
+  width: 246px;
+  height: 246px;
+}
+
+#partialCircle {
+  transform-origin: center;
+  position: absolute;
+  stroke: var(--color-session-work);
+  stroke-width: 6px;
+  fill: transparent;
+  stroke-linecap: round;
+}
+
+#partialCircleBackground {
+  position: absolute;
+  opacity: 0.3;
+  stroke: var(--color-gray);
+  stroke-width: 6px;
+  fill: transparent;
+  stroke-linecap: round;
+}
+
+/* 
+---------------------------------------------------------------------------------------------------------------------------------
+TEXT WITHIN THE CIRCLE --------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------------------------
+*/
+.circle-text-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  white-space: nowrap;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.circle-text-session-rounds-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+#sessionLabel {
+  font-size: 1.5rem;
+  margin-bottom: -5px;
+  margin-top: 10px;
+}
+
+#sessionCurrentRound {
+  font-size: 14px;
+  margin-bottom: -2px;
+}
+
+#sessionTimeLeft {
+  font-size: 2.7rem;
+  color: var(--color-current-session);
+}
+
+/* 
+---------------------------------------------------------------------------------------------------------------------------------
+BUTTONS -------------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------------------------
+*/
+.timer-controls-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  margin-top: 10px;
+  gap: 10px;
+}
+
+/* innerHTML of children are the svg buttons */
+.timer-controls-container > * > * {
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  color: var(--color-gray);
+  opacity: 0.6;
+}
+
+.svg-icon:hover {
+  opacity: 1;
+  color: var(--color-current-session);
+}
+
+#timerResetButton > * {
+  width: 35px;
+  height: 35px;
+  margin: 2.5px;
+  margin-left: 0px;
+}
+
+#settingsPageButton > * {
+  cursor: pointer;
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  z-index: 5;
+  width: 20px;
+  height: 20px;
+}

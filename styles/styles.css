@@ -1,0 +1,17 @@
+:root {
+  --color-gray: #ffffffaa;
+  --color-background: #1d3557;
+
+  /* session Colors */
+  --color-session-work: #0197f6;
+  --color-session-break: #70b77e;
+  --color-session-long-break: #eb5e28;
+
+  --color-current-session: var(--color-session-work);
+}
+
+body {
+  background-color: var(--color-background);
+  color: var(--color-gray);
+  padding: 1rem;
+}
