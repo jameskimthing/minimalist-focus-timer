@@ -36,18 +36,18 @@ async function ensureInitialized() {
 // ---------------------------------------------------------------------------------------------------------------------------------
 // MAIN LOOP -----------------------------------------------------------------------------------------------------------------------
 // ---------------------------------------------------------------------------------------------------------------------------------
-setInterval(() => {
-  if (STATE.isPaused || !INITIALIZED) return;
+// setInterval(() => {
+//   if (STATE.isPaused || !INITIALIZED) return;
 
-  const elapsedTime = Date.now() - STATE.startTime - STATE.totalPausedTime;
-  const timeLeft = Math.max(STATE.sessionLength - elapsedTime, 0);
+//   const elapsedTime = Date.now() - STATE.startTime - STATE.totalPausedTime;
+//   const timeLeft = Math.max(STATE.sessionLength - elapsedTime, 0);
 
-  adjustExtensionToPieIconIfNecessary({
-    timeLeft,
-    sessionLength: STATE.sessionLength,
-    sessionType: STATE.sessionType,
-  });
-}, 500);
+//   adjustExtensionToPieIconIfNecessary({
+//     timeLeft,
+//     sessionLength: STATE.sessionLength,
+//     sessionType: STATE.sessionType,
+//   });
+// }, 500);
 
 setInterval(() => {
   if (!INITIALIZED) return;
@@ -59,6 +59,8 @@ setInterval(() => {
 
   const elapsedTime = Date.now() - STATE.startTime - STATE.totalPausedTime;
   const timeLeft = Math.max(STATE.sessionLength - elapsedTime, 0);
+
+  adjustExtensionToPieIconIfNecessary(timeLeft);
 
   // Change session type, as finished current session
   if (timeLeft <= 0) {
@@ -159,6 +161,7 @@ function receiveMessage(message, sender, sendResponse) {
           STATE.totalPausedTime += Date.now() - STATE.pauseStartTime;
           STATE.pauseStartTime = 0;
           STATE.isPaused = false;
+          adjustExtensionToPieIconIfNecessary();
           // await adjustExtensionToPieIconIfNecessary({
           //   timeLeft: undefined,
           //   sessionLength: STATE.sessionLength,

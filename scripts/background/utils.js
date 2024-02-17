@@ -18,20 +18,62 @@ chrome.offscreen.createDocument({
  * @param {number} sessionLength - The total length of the current session
  * @param {"WORK" | "BREAK" | "LONG_BREAK"} sessionType - The type of the current session, determining the color of the icon.
  */
-async function adjustExtensionToPieIconIfNecessary(
-  options = { timeLeft, sessionLength, sessionType }
-) {
-  let { timeLeft, sessionLength, sessionType } = options;
+// async function adjustExtensionToPieIconIfNecessary(
+//   options = { timeLeft, sessionLength, sessionType }
+// ) {
+//   let { timeLeft, sessionLength, sessionType } = options;
 
-  // if (!timeLeft) {
-  //   const elapsedTime = Date.now() - STATE.startTime - STATE.totalPausedTime;
-  //   timeLeft = Math.max(STATE.sessionLength - elapsedTime, 0);
-  // }
-  let currentTimeAngle = (timeLeft / sessionLength) * 360;
+//   // if (!timeLeft) {
+//   //   const elapsedTime = Date.now() - STATE.startTime - STATE.totalPausedTime;
+//   //   timeLeft = Math.max(STATE.sessionLength - elapsedTime, 0);
+//   // }
+//   let currentTimeAngle = (timeLeft / sessionLength) * 360;
 
+//   STATE.currentExtensionIcon = "PIE";
+//   let color;
+//   switch (sessionType) {
+//     case "WORK":
+//       color = COLORS.sessions.work;
+//       break;
+//     case "BREAK":
+//       color = COLORS.sessions.break;
+//       break;
+//     case "LONG_BREAK":
+//       color = COLORS.sessions.longBreak;
+//       break;
+//   }
+
+//   const image = await sendMessage(
+//     "generate_extension_pie_icon",
+//     { iconAngle: currentTimeAngle, color },
+//     "offscreen"
+//   );
+//   chrome.action.setIcon({ path: image });
+// }
+
+let oldAngle;
+async function adjustExtensionToPieIconIfNecessary(timeLeft) {
+  if (!timeLeft) {
+    const elapsedTime = Date.now() - STATE.startTime - STATE.totalPausedTime;
+    timeLeft = Math.max(STATE.sessionLength - elapsedTime, 0);
+  }
+
+  const newAngle = (timeLeft / STATE.sessionLength) * 360;
+  const isAlreadyPi = STATE.currentExtensionIcon === "PIE";
+  const isSmallAngleChange =
+    Math.abs(oldAngle - newAngle) < ANGLE_DIFF_GENERATE_ICON;
+
+  console.log(
+    `isAlreadyPi: ${isAlreadyPi}, isSmallChange: ${isSmallAngleChange}`
+  );
+
+  if (isAlreadyPi && isSmallAngleChange) return;
+
+  oldAngle = newAngle;
   STATE.currentExtensionIcon = "PIE";
+
   let color;
-  switch (sessionType) {
+  switch (STATE.sessionType) {
     case "WORK":
       color = COLORS.sessions.work;
       break;
@@ -45,7 +87,7 @@ async function adjustExtensionToPieIconIfNecessary(
 
   const image = await sendMessage(
     "generate_extension_pie_icon",
-    { iconAngle: currentTimeAngle, color },
+    { iconAngle: newAngle, color },
     "offscreen"
   );
   chrome.action.setIcon({ path: image });
@@ -65,6 +107,7 @@ async function adjustExtensionToDefaultIconIfNecessary(sessionType, size) {
       break;
   }
 
+  STATE.currentExtensionIcon = "DEFAULT";
   const image = await sendMessage(
     "generate_extension_default_icon",
     { color, size },
