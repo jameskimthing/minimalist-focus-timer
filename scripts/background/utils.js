@@ -7,6 +7,73 @@ chrome.offscreen.createDocument({
 });
 
 // ---------------------------------------------------------------------------------------------------------------------------------
+// ADJUST CHROME EXTENSION ICON ----------------------------------------------------------------------------------------------------
+// ---------------------------------------------------------------------------------------------------------------------------------
+/**
+ * Updates the browser extension's icon if the change in time angle since the last update
+ * exceeds `ANGLE_DIFF_GENERATE_ICON`. The icon is updated to a "pie" representation of the
+ * session's progress with a specific color depending on the session type.
+ *
+ * @param {number} timeLeft - The amount of time remaining in the current session
+ * @param {number} sessionLength - The total length of the current session
+ * @param {"WORK" | "BREAK" | "LONG_BREAK"} sessionType - The type of the current session, determining the color of the icon.
+ */
+async function adjustExtensionToPieIconIfNecessary(
+  options = { timeLeft, sessionLength, sessionType }
+) {
+  let { timeLeft, sessionLength, sessionType } = options;
+
+  // if (!timeLeft) {
+  //   const elapsedTime = Date.now() - STATE.startTime - STATE.totalPausedTime;
+  //   timeLeft = Math.max(STATE.sessionLength - elapsedTime, 0);
+  // }
+  let currentTimeAngle = (timeLeft / sessionLength) * 360;
+
+  STATE.currentExtensionIcon = "PIE";
+  let color;
+  switch (sessionType) {
+    case "WORK":
+      color = COLORS.sessions.work;
+      break;
+    case "BREAK":
+      color = COLORS.sessions.break;
+      break;
+    case "LONG_BREAK":
+      color = COLORS.sessions.longBreak;
+      break;
+  }
+
+  const image = await sendMessage(
+    "generate_extension_pie_icon",
+    { iconAngle: currentTimeAngle, color },
+    "offscreen"
+  );
+  chrome.action.setIcon({ path: image });
+}
+
+async function adjustExtensionToDefaultIconIfNecessary(sessionType, size) {
+  let color;
+  switch (sessionType) {
+    case "WORK":
+      color = COLORS.sessions.work;
+      break;
+    case "BREAK":
+      color = COLORS.sessions.break;
+      break;
+    case "LONG_BREAK":
+      color = COLORS.sessions.longBreak;
+      break;
+  }
+
+  const image = await sendMessage(
+    "generate_extension_default_icon",
+    { color, size },
+    "offscreen"
+  );
+  chrome.action.setIcon({ path: image });
+}
+
+// ---------------------------------------------------------------------------------------------------------------------------------
 // SEND MESSAGE TO popup / offscreen -----------------------------------------------------------------------------------------------
 // ---------------------------------------------------------------------------------------------------------------------------------
 
@@ -49,7 +116,25 @@ async function sendMessage(action, content, target = "popup") {
  * @param {string} options.title The title of the notification.
  * @param {string} options.message The message body of the notification.
  */
-function pushNotification(options) {
+async function pushNotification(options) {
+  let color;
+  switch (STATE.sessionType) {
+    case "WORK":
+      color = COLORS.sessions.work;
+      break;
+    case "BREAK":
+      color = COLORS.sessions.break;
+      break;
+    case "LONG_BREAK":
+      color = COLORS.sessions.longBreak;
+      break;
+  }
+
+  const image = await sendMessage(
+    "generate_extension_default_icon",
+    { color: color, size: 128 },
+    "offscreen"
+  );
   sendMessage(
     "play_audio",
     "../../assets/sounds/notification.mp3",
@@ -60,7 +145,7 @@ function pushNotification(options) {
     {
       type: "basic",
       title: options.title,
-      iconUrl: "../../default.png",
+      iconUrl: image,
       message: options.message,
     },
     (_) => {}

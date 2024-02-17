@@ -99,6 +99,10 @@ BUTTONS ------------------------------------------------------------------------
   color: var(--color-current-session);
 }
 
+#timerHardResetButton > * {
+  margin-right: 3px;
+}
+
 #timerResetButton > * {
   width: 35px;
   height: 35px;

@@ -11,6 +11,11 @@ function receiveMessageFromBackground(message, sender, sendResponse) {
   if (message.target !== "offscreen") return;
 
   (async () => {
+    await sendMessage(
+      "log",
+      `[offscreen] received message with action ${message.action}`,
+      "background"
+    );
     switch (message.action) {
       case "play_audio":
         const audioTag = document.getElementById("audioTag");
@@ -19,6 +24,19 @@ function receiveMessageFromBackground(message, sender, sendResponse) {
         audioTag.load();
         audioTag.play();
         sendResponse();
+        break;
+      case "generate_extension_pie_icon":
+        const { iconAngle, color } = message.content;
+        const image = await generateExtensionPieIcon(iconAngle, color);
+        sendResponse(image);
+        break;
+      case "generate_extension_default_icon":
+        const { color: stateColor, size } = message.content;
+        const defaultImage = await generateExtensionDefaultIcon(
+          stateColor,
+          size
+        );
+        sendResponse(defaultImage);
         break;
       default:
         sendResponse();

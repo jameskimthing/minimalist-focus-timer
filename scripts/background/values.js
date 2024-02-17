@@ -1,6 +1,9 @@
 /** To show the latest "time" for some time. ex: show 1:00 for 0.990 seconds before continuing */
 const TIMER_PADDING = 990;
 
+// NOTE: Colors also present at /styles/styles.css
+// When updating these, update there too
+// TODO: integrate this to SETTINGS, and add to settingsPage.js too
 const COLORS = {
   background: "#2E4057",
   gray: "#D8D4F2",
@@ -10,6 +13,8 @@ const COLORS = {
     longBreak: "#EB5E28",
   },
 };
+
+const ANGLE_DIFF_GENERATE_ICON = 5;
 
 const SETTINGS = {
   workSessionLength: 0.1 * 60 * 1000 + TIMER_PADDING,
@@ -29,6 +34,9 @@ const STATE = {
   currentSessionRound: 1,
   isFinished: false,
 
+  // ExtensionIcon
+  currentExtensionIcon: "DEFAULT", // 'DEFAULT', 'PIE'
+
   softReset: function () {
     this.startTime = Date.now();
     this.pauseStartTime = Date.now();
@@ -43,6 +51,6 @@ const STATE = {
     this.sessionType = "WORK";
     this.sessionLength = SETTINGS.workSessionLength;
     this.currentSessionRound = 1;
-    this.isFinished = true;
+    this.isFinished = false;
   },
 };

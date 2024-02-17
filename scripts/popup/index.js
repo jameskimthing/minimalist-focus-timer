@@ -2,6 +2,8 @@
 (async () => {
   document.getElementById("timerPlayPauseButton").innerHTML = SVG_ICONS.play;
   document.getElementById("timerResetButton").innerHTML = SVG_ICONS.reset;
+  document.getElementById("timerHardResetButton").innerHTML =
+    SVG_ICONS.hardReset;
   document.getElementById("settingsPageButton").innerHTML = SVG_ICONS.settings;
 
   // initialize settings values and page

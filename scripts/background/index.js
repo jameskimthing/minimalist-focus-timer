@@ -22,6 +22,8 @@ let INITIALIZED = false;
   });
 
   INITIALIZED = true;
+
+  // chrome.action.setIcon({ path: "../../something.png" });
 })();
 
 /** Waits until all values are initialized */
@@ -35,6 +37,19 @@ async function ensureInitialized() {
 // MAIN LOOP -----------------------------------------------------------------------------------------------------------------------
 // ---------------------------------------------------------------------------------------------------------------------------------
 setInterval(() => {
+  if (STATE.isPaused || !INITIALIZED) return;
+
+  const elapsedTime = Date.now() - STATE.startTime - STATE.totalPausedTime;
+  const timeLeft = Math.max(STATE.sessionLength - elapsedTime, 0);
+
+  adjustExtensionToPieIconIfNecessary({
+    timeLeft,
+    sessionLength: STATE.sessionLength,
+    sessionType: STATE.sessionType,
+  });
+}, 500);
+
+setInterval(() => {
   if (!INITIALIZED) return;
 
   if (STATE.isPaused) {
@@ -45,6 +60,7 @@ setInterval(() => {
   const elapsedTime = Date.now() - STATE.startTime - STATE.totalPausedTime;
   const timeLeft = Math.max(STATE.sessionLength - elapsedTime, 0);
 
+  // Change session type, as finished current session
   if (timeLeft <= 0) {
     switch (STATE.sessionType) {
       case "WORK":
@@ -79,6 +95,7 @@ setInterval(() => {
       case "LONG_BREAK":
         STATE.isPaused = true;
         STATE.isFinished = true;
+        adjustExtensionToDefaultIconIfNecessary(STATE.sessionType, 32);
         pushNotification({
           title: `All session rounds completed`,
           message: `Finished a total of ${SETTINGS.sessionRounds} rounds`,
@@ -95,8 +112,8 @@ setInterval(() => {
 // EVENTS MESSAGES -----------------------------------------------------------------------------------------------------------------
 // ---------------------------------------------------------------------------------------------------------------------------------
 // message = { action, content }
-chrome.runtime.onMessage.addListener(receiveMessageFromPopup);
-function receiveMessageFromPopup(message, sender, sendResponse) {
+chrome.runtime.onMessage.addListener(receiveMessage);
+function receiveMessage(message, sender, sendResponse) {
   if (message.target !== "background") return;
   console.log(`[background] received message with action ${message.action}`);
 
@@ -137,16 +154,34 @@ function receiveMessageFromPopup(message, sender, sendResponse) {
         if (STATE.isPaused == false) {
           STATE.pauseStartTime = Date.now();
           STATE.isPaused = true;
+          await adjustExtensionToDefaultIconIfNecessary(STATE.sessionType, 32);
         } else {
           STATE.totalPausedTime += Date.now() - STATE.pauseStartTime;
           STATE.pauseStartTime = 0;
           STATE.isPaused = false;
+          // await adjustExtensionToPieIconIfNecessary({
+          //   timeLeft: undefined,
+          //   sessionLength: STATE.sessionLength,
+          //   sessionType: STATE.sessionType,
+          //   force: true,
+          // });
         }
         STATE.currentPausedTime = 0;
         sendResponse();
         break;
       case "reset_timer":
-        STATE.softReset();
+        if (message.content.hard) {
+          STATE.hardReset();
+          await adjustExtensionToDefaultIconIfNecessary(STATE.sessionType, 32);
+        } else STATE.softReset();
+        sendResponse();
+        break;
+      case "log":
+        console.log(message.content);
+        sendResponse();
+        break;
+      case "error":
+        console.error(message.content);
         sendResponse();
         break;
       default:

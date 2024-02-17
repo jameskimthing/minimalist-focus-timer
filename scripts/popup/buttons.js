@@ -7,7 +7,14 @@ timerPlayPauseButton.addEventListener("click", async () => {
 
 const timerResetButton = document.getElementById("timerResetButton");
 timerResetButton.addEventListener("click", async () => {
-  await sendMessage("reset_timer");
+  await sendMessage("reset_timer", { hard: false });
+  const state = await sendMessage("get_state");
+  Object.assign(STATE, state);
+});
+
+const timerHardResetButton = document.getElementById("timerHardResetButton");
+timerHardResetButton.addEventListener("click", async () => {
+  await sendMessage("reset_timer", { hard: true });
   const state = await sendMessage("get_state");
   Object.assign(STATE, state);
 });

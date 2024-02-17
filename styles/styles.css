@@ -3,6 +3,8 @@
   --color-background: #1d3557;
 
   /* session Colors */
+  /* NOTE: these colors (not replicated) also used in /scripts/background/values.js.
+  When updating these, update there too */
   --color-session-work: #0197f6;
   --color-session-break: #70b77e;
   --color-session-long-break: #eb5e28;
