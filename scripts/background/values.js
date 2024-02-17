@@ -17,10 +17,10 @@ const COLORS = {
 const ANGLE_DIFF_GENERATE_ICON = 5;
 
 const SETTINGS = {
-  workSessionLength: 0.1 * 60 * 1000 + TIMER_PADDING,
-  breakSessionLength: 0.08 * 60 * 1000 + TIMER_PADDING,
-  longBreakSessionLength: 0.2 * 60 * 1000 + TIMER_PADDING,
-  sessionRounds: 3,
+  workSessionLength: 25 * 60 * 1000 + TIMER_PADDING,
+  breakSessionLength: 5 * 60 * 1000 + TIMER_PADDING,
+  longBreakSessionLength: 15 * 60 * 1000 + TIMER_PADDING,
+  sessionRounds: 4,
 };
 
 const STATE = {
