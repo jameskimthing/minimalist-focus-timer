@@ -10,6 +10,12 @@
 let INITIALIZED = false;
 (async () => {
   Object.assign(SETTINGS, await getStorage("SETTINGS"));
+
+  // For debugging:
+  // SETTINGS.workSessionLength = 0.1 * 60 * 1000 + TIMER_PADDING;
+  // SETTINGS.breakSessionLength = 0.1 * 60 * 1000 + TIMER_PADDING;
+  // SETTINGS.longBreakSessionLength = 0.1 * 60 * 1000 + TIMER_PADDING;
+
   Object.assign(STATE, {
     isPaused: true,
     startTime: Date.now(),
@@ -36,19 +42,6 @@ async function ensureInitialized() {
 // ---------------------------------------------------------------------------------------------------------------------------------
 // MAIN LOOP -----------------------------------------------------------------------------------------------------------------------
 // ---------------------------------------------------------------------------------------------------------------------------------
-// setInterval(() => {
-//   if (STATE.isPaused || !INITIALIZED) return;
-
-//   const elapsedTime = Date.now() - STATE.startTime - STATE.totalPausedTime;
-//   const timeLeft = Math.max(STATE.sessionLength - elapsedTime, 0);
-
-//   adjustExtensionToPieIconIfNecessary({
-//     timeLeft,
-//     sessionLength: STATE.sessionLength,
-//     sessionType: STATE.sessionType,
-//   });
-// }, 500);
-
 setInterval(() => {
   if (!INITIALIZED) return;
 
@@ -66,7 +59,7 @@ setInterval(() => {
   if (timeLeft <= 0) {
     switch (STATE.sessionType) {
       case "WORK":
-        if (STATE.currentSessionRound === SETTINGS.sessionRounds) {
+        if (STATE.currentSessionRound >= SETTINGS.sessionRounds) {
           STATE.sessionType = "LONG_BREAK";
           STATE.sessionLength = SETTINGS.longBreakSessionLength;
 
@@ -117,7 +110,10 @@ setInterval(() => {
 chrome.runtime.onMessage.addListener(receiveMessage);
 function receiveMessage(message, sender, sendResponse) {
   if (message.target !== "background") return;
-  console.log(`[background] received message with action ${message.action}`);
+
+  if (message.action !== "log" && message.action !== "error") {
+    console.log(`[background] received message with action ${message.action}`);
+  }
 
   (async () => {
     await ensureInitialized();

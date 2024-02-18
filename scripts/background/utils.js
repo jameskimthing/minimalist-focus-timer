@@ -51,7 +51,7 @@ chrome.offscreen.createDocument({
 //   chrome.action.setIcon({ path: image });
 // }
 
-let oldAngle;
+let oldAngle = 0;
 async function adjustExtensionToPieIconIfNecessary(timeLeft) {
   if (!timeLeft) {
     const elapsedTime = Date.now() - STATE.startTime - STATE.totalPausedTime;
@@ -62,10 +62,6 @@ async function adjustExtensionToPieIconIfNecessary(timeLeft) {
   const isAlreadyPi = STATE.currentExtensionIcon === "PIE";
   const isSmallAngleChange =
     Math.abs(oldAngle - newAngle) < ANGLE_DIFF_GENERATE_ICON;
-
-  console.log(
-    `isAlreadyPi: ${isAlreadyPi}, isSmallChange: ${isSmallAngleChange}`
-  );
 
   if (isAlreadyPi && isSmallAngleChange) return;
 

@@ -1,4 +1,4 @@
-async function generateExtensionPieIcon(angle, color) {
+async function generateExtensionPieIcon(angle, color, size = 32) {
   const circumference = 2 * Math.PI * 5;
   const strokeDasharray = circumference * (angle / 360);
   const svg = `
@@ -12,7 +12,7 @@ async function generateExtensionPieIcon(angle, color) {
   </svg>`;
 
   const svgDataUrl = `data:image/svg+xml;charset=utf-8;base64,${btoa(svg)}`;
-  const png = await svgToPng64(svgDataUrl, 32, 32);
+  const png = await svgToPng64(svgDataUrl, size, size);
   return png;
 }
 
