@@ -7,7 +7,6 @@
         "service_worker": "scripts/background/bgLoader.js"
     },
     "permissions": [
-        "alarms",
         "storage",
         "notifications",
         "offscreen"
