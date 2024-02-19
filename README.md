@@ -8,7 +8,7 @@
 
 - A timer that runs in the background:
   - Pushes a notification with a simple sound when it is time to take a break or continue working
-  - Automatically changes the extension icon to match the current progress
+  - Dynamic extension icon that adjusts as a "pie icon" relative to the current progress of the session
   - Changes the color of the extension icon and popup based on the current session type (focusing / break / long break)
 - A settings page that allows you to edit each session length, and the session rounds
 - A pause / play button
