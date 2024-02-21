@@ -91,6 +91,10 @@ function initializeSettingsPage() {
       Object.assign(STATE, await sendMessage("get_state"));
     });
 
+    /**
+     * Called whenever there is a change in settings, then updates the settings ui and
+     * the `SETTINGS` variable
+     */
     function updateSettingsSlider() {
       switch (value.type) {
         case "mins":

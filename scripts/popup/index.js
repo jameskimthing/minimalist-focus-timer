@@ -1,5 +1,7 @@
-// Notify background page that popup has opened
+// Main initialization
 (async () => {
+  // Check `./values.js` for why this horrendous code exists. (its because I need to change
+  // its colors, and img.src doesn't allow that)
   document.getElementById("timerPlayPauseButton").innerHTML = SVG_ICONS.play;
   document.getElementById("timerResetButton").innerHTML = SVG_ICONS.reset;
   document.getElementById("timerHardResetButton").innerHTML =
@@ -16,6 +18,7 @@
   Object.assign(SETTINGS, settings);
   Object.assign(STATE, state);
 
+  // Using `SETTINGS`, adjusts the settings ui and adds event listeners to each input
   initializeSettingsPage();
 
   adjustUiToState();
@@ -30,6 +33,9 @@
   updateTimerUi();
 })();
 
+/**
+ * Adjusts the ui (e.g. color, circle arc, time left, and so on)
+ */
 function adjustUiToState() {
   let timeLeft;
   if (STATE.isFinished) timeLeft = 0;

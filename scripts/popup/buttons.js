@@ -1,3 +1,5 @@
+// Adds event listeners to buttons
+
 const timerPlayPauseButton = document.getElementById("timerPlayPauseButton");
 timerPlayPauseButton.addEventListener("click", async () => {
   await sendMessage("toggle_play_pause");

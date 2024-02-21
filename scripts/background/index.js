@@ -176,10 +176,12 @@ function receiveMessage(message, sender, sendResponse) {
         sendResponse();
         break;
       case "log":
+        // For debugging
         console.log(message.content);
         sendResponse();
         break;
       case "error":
+        // For debugging
         console.error(message.content);
         sendResponse();
         break;

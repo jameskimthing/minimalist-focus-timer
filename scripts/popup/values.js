@@ -3,10 +3,25 @@
  */
 const TIMER_PADDING = 990;
 
+/**
+ * Contains the state for the timer. This is closer to a "dummy", in that whenever
+ * something changes (ex: whenever the "pause" button is clicked, a message is sent
+ * to the background to update the state. Then, the popup requests the value of "state"
+ * which updates the "dummy" one here)
+ */
 const STATE = {};
+
+/**
+ * Just like `STATE`, it is closer to a "dummy" in the sense that it gets all its values
+ * from the background,
+ */
 const SETTINGS = {};
 
 // SVG Images
+/**
+ * Initialized in javascript, to manually change their fill colors on the fly.
+ * Using img.src does not allow this, as at that point it is no longer an svg.
+ */
 const SVG_ICONS = {
   pause: `<svg class="svg-icon" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 16 16"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M2.75 2.75h3.5v10.5h-3.5zm7 0h3.5v10.5h-3.5z"/></svg>`,
   play: `<svg class="svg-icon" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 16 16"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M2.75 2.75v10.5L12.25 8z"/></svg>`,

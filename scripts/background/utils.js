@@ -9,6 +9,7 @@ chrome.offscreen.createDocument({
 // ---------------------------------------------------------------------------------------------------------------------------------
 // ADJUST CHROME EXTENSION ICON ----------------------------------------------------------------------------------------------------
 // ---------------------------------------------------------------------------------------------------------------------------------
+let oldAngle = 0;
 /**
  * Updates the browser extension's icon if the change in time angle since the last update
  * exceeds `ANGLE_DIFF_GENERATE_ICON`. The icon is updated to a "pie" representation of the
@@ -18,40 +19,6 @@ chrome.offscreen.createDocument({
  * @param {number} sessionLength - The total length of the current session
  * @param {"WORK" | "BREAK" | "LONG_BREAK"} sessionType - The type of the current session, determining the color of the icon.
  */
-// async function adjustExtensionToPieIconIfNecessary(
-//   options = { timeLeft, sessionLength, sessionType }
-// ) {
-//   let { timeLeft, sessionLength, sessionType } = options;
-
-//   // if (!timeLeft) {
-//   //   const elapsedTime = Date.now() - STATE.startTime - STATE.totalPausedTime;
-//   //   timeLeft = Math.max(STATE.sessionLength - elapsedTime, 0);
-//   // }
-//   let currentTimeAngle = (timeLeft / sessionLength) * 360;
-
-//   STATE.currentExtensionIcon = "PIE";
-//   let color;
-//   switch (sessionType) {
-//     case "WORK":
-//       color = COLORS.sessions.work;
-//       break;
-//     case "BREAK":
-//       color = COLORS.sessions.break;
-//       break;
-//     case "LONG_BREAK":
-//       color = COLORS.sessions.longBreak;
-//       break;
-//   }
-
-//   const image = await sendMessage(
-//     "generate_extension_pie_icon",
-//     { iconAngle: currentTimeAngle, color },
-//     "offscreen"
-//   );
-//   chrome.action.setIcon({ path: image });
-// }
-
-let oldAngle = 0;
 async function adjustExtensionToPieIconIfNecessary(timeLeft) {
   if (!timeLeft) {
     const elapsedTime = Date.now() - STATE.startTime - STATE.totalPausedTime;
@@ -68,6 +35,8 @@ async function adjustExtensionToPieIconIfNecessary(timeLeft) {
   oldAngle = newAngle;
   STATE.currentExtensionIcon = "PIE";
 
+  // TODO: This code is repeated across many places in the app. Integrate `COLORS` to
+  // `SETTINGS`, and add a built-in function called something like `STATE.getCurrentColor`
   let color;
   switch (STATE.sessionType) {
     case "WORK":
@@ -89,6 +58,10 @@ async function adjustExtensionToPieIconIfNecessary(timeLeft) {
   chrome.action.setIcon({ path: image });
 }
 
+/**
+ * Changes to the current default icon (shown when session is paused or finished).
+ * Does nothing if it is already that icon (with matching colors)
+ */
 async function adjustExtensionToDefaultIconIfNecessary(sessionType, size) {
   let color;
   switch (sessionType) {

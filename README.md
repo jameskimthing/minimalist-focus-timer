@@ -4,6 +4,8 @@
 
 ![Pomodoro Timer](/assets/readme/pomodoro_extension.png)
 
+<p align="center">You can get it <a href="https://chromewebstore.google.com/detail/pomodoro-focus-timer/eglbnllngiannimbjimkpjklnjgelnoi" target="_blank">here</a></p>
+
 ## Features
 
 - A timer that runs in the background:
@@ -20,6 +22,7 @@
 - Customizable colors
 - Ability to toggle the push notification, and the sound
 - More controls to customize the timer (ex: forward session, to previous session)
+- A "raining sound" in the background (toggleable)
 
 ## Development
 

@@ -3,11 +3,11 @@
 // ---------------------------------------------------------------------------------------------------------------------------------
 
 /**
- * Sends a message using the Chrome extension messaging API and returns a Promise.
+ * Sends a message using the Chrome extension messaging API and returns a Promise
  *
  * @param {string} action - Action, such as `get_state` or `update_settings`
  * @param {*} content - The payload of the message, if any.
- * @param {"background" | "offscreen"} target
+ * @param {"background" | "offscreen"} target - Goes to "background" by default
  */
 async function sendMessage(action, content, target = "background") {
   const message = { action, content, target };
