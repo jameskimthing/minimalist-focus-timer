@@ -7,8 +7,8 @@ timerPlayPauseButton.addEventListener("click", async () => {
   Object.assign(STATE, state);
 });
 
-const timerResetButton = document.getElementById("timerResetButton");
-timerResetButton.addEventListener("click", async () => {
+const timerSoftResetButton = document.getElementById("timerSoftResetButton");
+timerSoftResetButton.addEventListener("click", async () => {
   await sendMessage("reset_timer", { hard: false });
   const state = await sendMessage("get_state");
   Object.assign(STATE, state);

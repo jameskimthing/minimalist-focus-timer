@@ -2,12 +2,12 @@
 (async () => {
   // Check `./values.js` for why this horrendous code exists. (its because I need to change
   // its colors, and img.src doesn't allow that)
-  document.getElementById("timerPlayPauseButton").innerHTML = SVG_ICONS.play;
-  document.getElementById("timerResetButton").innerHTML = SVG_ICONS.reset;
-  document.getElementById("timerHardResetButton").innerHTML =
-    SVG_ICONS.hardReset;
-  document.getElementById("settingsPageButton").innerHTML = SVG_ICONS.settings;
-  document.getElementById("githubLink").innerHTML = SVG_ICONS.github;
+  // document.getElementById("timerPlayPauseButton").innerHTML = SVG_ICONS.play;
+  // document.getElementById("timerSoftResetButton").innerHTML = SVG_ICONS.reset;
+  // document.getElementById("timerHardResetButton").innerHTML =
+  //   SVG_ICONS.hardReset;
+  // document.getElementById("settingsPageButton").innerHTML = SVG_ICONS.settings;
+  // document.getElementById("githubLink").innerHTML = SVG_ICONS.github;
 
   // initialize settings values and page
   const [settings, state] = await Promise.all([

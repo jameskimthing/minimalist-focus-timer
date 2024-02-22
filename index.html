@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -6,6 +7,15 @@
     <link rel="stylesheet" type="text/css" href="styles/styles.css" />
     <link rel="stylesheet" type="text/css" href="styles/timer.css" />
     <link rel="stylesheet" type="text/css" href="styles/settings.css" />
+
+    <!-- Scripts -->
+    <script src="scripts/popup/values.js"></script>
+    <script src="scripts/popup/utils.js"></script>
+    <script defer src="components/SvgButton.js"></script>
+    <script defer src="scripts/popup/uiAdjust.js"></script>
+    <script defer src="scripts/popup/settingsPage.js"></script>
+    <script defer src="scripts/popup/buttons.js"></script>
+    <script defer src="scripts/popup/index.js"></script>
   </head>
   <body>
     <!-- Timer -->
@@ -30,12 +40,17 @@
 
     <!-- Timer Controls -->
     <div class="timer-controls-container">
-      <div id="timerHardResetButton"></div>
-      <div id="timerPlayPauseButton"></div>
-      <div id="timerResetButton"></div>
+      <svg-button id="timerHardResetButton" icon-name="hardReset"></svg-button>
+      <svg-button id="timerPlayPauseButton" icon-name="play"></svg-button>
+      <svg-button id="timerSoftResetButton" icon-name="softReset"></svg-button>
     </div>
 
-    <div id="settingsPageButton"></div>
+    <!-- At the bottom right -->
+    <svg-button
+      id="settingsPageButton"
+      icon-name="settings"
+      size="20px"
+    ></svg-button>
 
     <!-- Settings Page -->
     <div id="settingsPage">
@@ -46,17 +61,11 @@
       <!-- Go give a star to my github repo -->
       <a
         href="https://github.com/jameskimthing/pomodoro-focus-timer"
-        id="githubLink"
         target="_blank"
       >
-        Github
+        <svg-button id="githubLink" icon-name="github" size="20px">
+        </svg-button>
       </a>
     </div>
   </body>
-
-  <script src="scripts/popup/values.js"></script>
-  <script src="scripts/popup/utils.js"></script>
-  <script src="scripts/popup/settingsPage.js"></script>
-  <script src="scripts/popup/buttons.js"></script>
-  <script src="scripts/popup/index.js"></script>
 </html>

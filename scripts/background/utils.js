@@ -1,7 +1,7 @@
 // TODO
 // Doesnt actually need "BLOBS" reason, but is just there so "AUDIO_PLAYBACK" wont be suspended after 30 seconds
 chrome.offscreen.createDocument({
-  url: chrome.runtime.getURL("../../assets/offscreen/offscreen.html"),
+  url: chrome.runtime.getURL("../../offscreen.html"),
   reasons: ["AUDIO_PLAYBACK", "BLOBS"],
   justification: "notification",
 });

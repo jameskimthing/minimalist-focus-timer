@@ -55,16 +55,7 @@
 }
 
 #githubLink {
-  position: fixed;
-  bottom: 10px;
+  position: absolute;
+  bottom: 6px;
   left: 10px;
-  width: 30px;
-  height: 30px;
-  color: var(--color-gray);
-  opacity: 0.6;
-}
-
-#githubLink:hover {
-  opacity: 1;
-  color: var(--color-current-session);
 }

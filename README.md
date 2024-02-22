@@ -23,6 +23,7 @@
 - Ability to toggle the push notification, and the sound
 - More controls to customize the timer (ex: forward session, to previous session)
 - A "raining sound" in the background (toggleable)
+- Firefox
 
 ## Development
 

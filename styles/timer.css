@@ -85,37 +85,10 @@ BUTTONS ------------------------------------------------------------------------
   gap: 10px;
 }
 
-/* innerHTML of children are the svg buttons */
-.timer-controls-container > * > * {
-  width: 40px;
-  height: 40px;
-  cursor: pointer;
-  color: var(--color-gray);
-  opacity: 0.6;
-}
-
-.svg-icon:hover {
-  opacity: 1;
-  color: var(--color-current-session);
-}
-
-#timerHardResetButton > * {
-  /* margin-right: 3px; */
-}
-
-#timerResetButton > * {
-  width: 35px;
-  height: 35px;
-  margin: 2.5px;
-  margin-left: 0px;
-}
-
-#settingsPageButton > * {
-  cursor: pointer;
+#settingsPageButton {
+  /* cursor: pointer; */
   position: absolute;
-  bottom: 10px;
+  bottom: 6px;
   right: 10px;
   z-index: 5;
-  width: 20px;
-  height: 20px;
 }
