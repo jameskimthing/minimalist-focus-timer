@@ -63,6 +63,8 @@ function adjustTimerSessionType(sessionType) {
 let lastAdjustTime;
 const timerElement = document.getElementById("sessionTimeLeft");
 function adjustTimerTimeLeft(time) {
+  time = Math.max(time, 0);
+
   if (lastAdjustTime === time) return;
   lastAdjustTime = time;
 

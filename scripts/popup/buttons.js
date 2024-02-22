@@ -14,6 +14,13 @@ timerSoftResetButton.addEventListener("click", async () => {
   Object.assign(STATE, state);
 });
 
+const timerSkipButton = document.getElementById("timerSkipButton");
+timerSkipButton.addEventListener("click", async () => {
+  await sendMessage("skip_session");
+  const state = await sendMessage("get_state");
+  Object.assign(STATE, state);
+});
+
 const timerHardResetButton = document.getElementById("timerHardResetButton");
 timerHardResetButton.addEventListener("click", async () => {
   await sendMessage("reset_timer", { hard: true });

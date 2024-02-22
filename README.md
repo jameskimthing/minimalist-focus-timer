@@ -16,12 +16,12 @@
 - A pause / play button
 - A hard reset button (start from session 1)
 - A soft reset button (redo current round)
+- A "skip timer" button (move to next session)
 
 ## Features to Come
 
 - Customizable colors
 - Ability to toggle the push notification, and the sound
-- More controls to customize the timer (ex: forward session, to previous session)
 - A "raining sound" in the background (toggleable)
 - Firefox
 

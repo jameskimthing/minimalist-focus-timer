@@ -129,6 +129,11 @@ async function sendMessage(action, content, target = "popup") {
  * @param {string} options.message The message body of the notification.
  */
 async function pushNotification(options) {
+  if (STATE.dontShowNextPopup) {
+    STATE.dontShowNextPopup = false;
+    return;
+  }
+
   let color;
   switch (STATE.sessionType) {
     case "WORK":

@@ -149,6 +149,11 @@ function receiveMessage(message, sender, sendResponse) {
         sendResponse();
         break;
       case "toggle_play_pause":
+        if (STATE.isFinished) {
+          sendResponse();
+          break;
+        }
+
         if (STATE.isPaused == false) {
           STATE.pauseStartTime = Date.now();
           STATE.isPaused = true;
@@ -158,14 +163,21 @@ function receiveMessage(message, sender, sendResponse) {
           STATE.pauseStartTime = 0;
           STATE.isPaused = false;
           adjustExtensionToPieIconIfNecessary();
-          // await adjustExtensionToPieIconIfNecessary({
-          //   timeLeft: undefined,
-          //   sessionLength: STATE.sessionLength,
-          //   sessionType: STATE.sessionType,
-          //   force: true,
-          // });
         }
         STATE.currentPausedTime = 0;
+        sendResponse();
+        break;
+      case "skip_session":
+        if (STATE.isFinished) {
+          sendResponse();
+          break;
+        }
+
+        STATE.softReset();
+        STATE.startTime = Date.now() - STATE.sessionLength - 1000;
+        STATE.dontShowNextPopup = true;
+        if (STATE.sessionType !== "LONG_BREAK") STATE.isPaused = false;
+
         sendResponse();
         break;
       case "reset_timer":

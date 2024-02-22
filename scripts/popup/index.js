@@ -1,14 +1,5 @@
 // Main initialization
 (async () => {
-  // Check `./values.js` for why this horrendous code exists. (its because I need to change
-  // its colors, and img.src doesn't allow that)
-  // document.getElementById("timerPlayPauseButton").innerHTML = SVG_ICONS.play;
-  // document.getElementById("timerSoftResetButton").innerHTML = SVG_ICONS.reset;
-  // document.getElementById("timerHardResetButton").innerHTML =
-  //   SVG_ICONS.hardReset;
-  // document.getElementById("settingsPageButton").innerHTML = SVG_ICONS.settings;
-  // document.getElementById("githubLink").innerHTML = SVG_ICONS.github;
-
   // initialize settings values and page
   const [settings, state] = await Promise.all([
     sendMessage("get_settings"),
@@ -47,8 +38,6 @@ function adjustUiToState() {
       STATE.currentPausedTime;
     timeLeft = Math.max(STATE.sessionLength - elapsedTime, 0);
   }
-
-  if (timeLeft < 0) return;
 
   adjustCurrentSessionColor(STATE.sessionType);
   adjustCircleArc(timeLeft / STATE.sessionLength);

@@ -34,6 +34,7 @@ const STATE = {
   sessionLength: 0,
   currentSessionRound: 1,
   isFinished: false,
+  dontShowNextPopup: false,
 
   // ExtensionIcon
   currentExtensionIcon: "DEFAULT", // 'DEFAULT', 'PIE'
