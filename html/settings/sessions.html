@@ -19,6 +19,8 @@
     <script defer src="../../components/SvgButton.js"></script>
     <script defer src="../../components/InfoTooltip.js"></script>
     <script defer src="../../components/RangeInput.js"></script>
+
+    <script defer src="../../scripts/popup/settings/sessions.js"></script>
   </head>
   <body>
     <form id="settingsForm">
@@ -54,6 +56,11 @@
         type="rounds"
       >
       </range-input>
+
+      <label class="checkbox-container">
+        <input class="checkbox" id="stepsByFive" type="checkbox" />
+        "Steps are by 5"
+      </label>
     </form>
 
     <!-- At the bottom right -->

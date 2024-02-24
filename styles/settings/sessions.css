@@ -10,3 +10,22 @@
   bottom: 6px;
   left: 10px;
 }
+
+.checkbox {
+  -ms-transform: scale(1.4);
+  -moz-transform: scale(1.4);
+  -webkit-transform: scale(1.4);
+  -o-transform: scale(1.4);
+  transform: scale(1.4);
+  padding: 10px;
+  accent-color: #0962cd;
+  cursor: pointer;
+}
+
+.checkbox-container {
+  cursor: pointer;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 5px;
+}
