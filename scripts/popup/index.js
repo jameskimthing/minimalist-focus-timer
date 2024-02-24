@@ -9,36 +9,37 @@
   Object.assign(SETTINGS, settings);
   Object.assign(STATE, state);
 
-  // Using `SETTINGS`, adjusts the settings ui and adds event listeners to each input
-  // initializeSettingsPage();
-
   adjustUiToState();
   function updateTimerUi() {
-    if (STATE.isFinished) return requestAnimationFrame(updateTimerUi);
-    if (STATE.isPaused)
-      STATE.currentPausedTime = Date.now() - STATE.pauseStartTime;
+    let timeLeft;
+    if (STATE.isFinished) timeLeft = 0;
+    else {
+      if (STATE.isPaused) {
+        STATE.pauseStartTime === null
+          ? (STATE.pauseStartTime = Date.now())
+          : (STATE.shortPausedDuration = Date.now() - STATE.pauseStartTime);
+      } else {
+        if (STATE.pauseStartTime !== null) {
+          STATE.storedPausedDuration += STATE.shortPausedDuration;
+          STATE.pauseStartTime = null;
+          STATE.shortPausedDuration = 0;
+        }
+      }
 
-    adjustUiToState();
+      STATE.totalPausedDuration =
+        STATE.storedPausedDuration + STATE.shortPausedDuration;
+      const elapsedTime =
+        Date.now() - STATE.startTime - STATE.totalPausedDuration;
+      timeLeft = Math.max(STATE.sessionLength - elapsedTime, 0);
+    }
+
+    adjustUiToState(timeLeft);
     return requestAnimationFrame(updateTimerUi);
   }
   updateTimerUi();
 })();
 
-/**
- * Adjusts the ui (e.g. color, circle arc, time left, and so on)
- */
-function adjustUiToState() {
-  let timeLeft;
-  if (STATE.isFinished) timeLeft = 0;
-  else {
-    const elapsedTime =
-      Date.now() -
-      STATE.startTime -
-      STATE.totalPausedTime -
-      STATE.currentPausedTime;
-    timeLeft = Math.max(STATE.sessionLength - elapsedTime, 0);
-  }
-
+function adjustUiToState(timeLeft) {
   adjustCurrentSessionColor(STATE.sessionType);
   adjustCircleArc(timeLeft / STATE.sessionLength);
   adjustTimerSessionType(STATE.sessionType);
@@ -70,44 +71,3 @@ function receiveMessageFromBackground(message, sender, sendResponse) {
 
   return true;
 }
-
-// function downloadImage(base64Data, filename) {
-//   try {
-//     const element = document.createElement("a");
-//     element.setAttribute("href", base64Data);
-//     element.setAttribute("download", filename);
-//     document.body.appendChild(element);
-//     element.click();
-//     document.body.removeChild(element);
-//   } catch (e) {
-//     console.log(e);
-//   }
-// }
-
-// (async () => {
-//   await new Promise((resolve) => setTimeout(resolve, 1000));
-//   const images = await Promise.all([
-//     sendMessage(
-//       "generate_extension_pie_icon",
-//       { iconAngle: 270, color: "#0197f6", size: 128 },
-//       "offscreen"
-//     ),
-//     sendMessage(
-//       "generate_extension_pie_icon",
-//       { iconAngle: 270, color: "#70b77e", size: 128 },
-//       "offscreen"
-//     ),
-//     sendMessage(
-//       "generate_extension_pie_icon",
-//       { iconAngle: 270, color: "#eb5e28", size: 128 },
-//       "offscreen"
-//     ),
-//   ]);
-
-//   let index = 0;
-//   for (const image of images) {
-//     console.log(image);
-//     downloadImage(image, `icon-${index}.png`);
-//     index++;
-//   }
-// })();

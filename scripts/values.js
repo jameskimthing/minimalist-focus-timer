@@ -5,6 +5,8 @@ const ANGLE_DIFF_GENERATE_ICON = 5;
 const SETTINGS = {
   sessionRounds: 4,
   sessionInputRangeStep: 1,
+  sessionAutoPauseAfterWork: true,
+  sessionAutoPauseAfterBreak: true,
   sessionLength: {
     WORK: 25 * 60 * 1000 + TIMER_PADDING,
     BREAK: 5 * 60 * 1000 + TIMER_PADDING,
@@ -18,14 +20,17 @@ const SETTINGS = {
     BREAK: "#70B77E",
     LONG_BREAK: "#EB5E28",
   },
+
+  soundOnNotification: true,
 };
 
 const STATE = {
   isPaused: true,
   startTime: 0,
-  pauseStartTime: 0,
-  totalPausedTime: 0,
-  currentPausedTime: 0, // used within background/index.js
+  pauseStartTime: null,
+  storedPausedDuration: 0,
+  shortPausedDuration: 0,
+  totalPausedDuration: 0,
   sessionType: "WORK", // 'WORK', 'BREAK', 'LONG_BREAK',
   sessionRound: 1,
   isFinished: false,
@@ -40,15 +45,15 @@ const STATE = {
   set sessionLength(_) {},
   set color(_) {},
 
-  // ExtensionIcon
-  currentExtensionIcon: "DEFAULT", // 'DEFAULT', 'PIE'
-
   softReset: function () {
     this.startTime = Date.now();
-    this.pauseStartTime = Date.now();
-    this.totalPausedTime = 0;
-    this.currentPausedTime = 0;
+    this.totalPausedDuration = 0;
+    this.storedPausedDuration = 0;
+    this.shortPausedDuration = 0;
     this.isFinished = false;
+    this.isPaused
+      ? (this.pauseStartTime = null)
+      : (this.pauseStartTime = Date.now());
   },
 
   hardReset: function () {

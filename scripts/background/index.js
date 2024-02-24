@@ -13,9 +13,10 @@ let INITIALIZED = false;
   Object.assign(STATE, {
     isPaused: true,
     startTime: Date.now(),
-    pauseStartTime: Date.now(),
-    totalPausedTime: 0,
-    currentPausedTime: 0,
+    pauseStartTime: null,
+    storedPausedDuration: 0,
+    shortPausedDuration: 0,
+    totalPausedDuration: 0,
     sessionType: "WORK", // 'WORK', 'BREAK', 'LONG_BREAK',
     sessionRound: 1,
   });
@@ -39,17 +40,25 @@ setInterval(() => {
   if (!INITIALIZED) return;
 
   if (STATE.isPaused) {
-    STATE.currentPausedTime = Date.now() - STATE.pauseStartTime;
-    return;
+    STATE.pauseStartTime === null
+      ? (STATE.pauseStartTime = Date.now())
+      : (STATE.shortPausedDuration = Date.now() - STATE.pauseStartTime);
+  } else {
+    if (STATE.pauseStartTime !== null) {
+      STATE.storedPausedDuration += STATE.shortPausedDuration;
+      STATE.pauseStartTime = null;
+      STATE.shortPausedDuration = 0;
+    }
   }
 
-  const elapsedTime = Date.now() - STATE.startTime - STATE.totalPausedTime;
+  STATE.totalPausedDuration =
+    STATE.storedPausedDuration + STATE.shortPausedDuration;
+  const elapsedTime = Date.now() - STATE.startTime - STATE.totalPausedDuration;
   const timeLeft = Math.max(STATE.sessionLength - elapsedTime, 0);
 
-  adjustExtensionToPieIconIfNecessary(timeLeft);
+  adjustExtensionIcon(timeLeft);
 
-  // Change session type, as finished current session
-  if (timeLeft <= 0) {
+  if (timeLeft <= 0 && !STATE.isFinished) {
     switch (STATE.sessionType) {
       case "WORK":
         if (STATE.sessionRound >= SETTINGS.sessionRounds) {
@@ -77,7 +86,6 @@ setInterval(() => {
       case "LONG_BREAK":
         STATE.isPaused = true;
         STATE.isFinished = true;
-        adjustExtensionToDefaultIconIfNecessary(STATE.sessionType, 32);
         pushNotification({
           title: `All session rounds completed`,
           message: `Finished a total of ${SETTINGS.sessionRounds} rounds`,
@@ -112,9 +120,21 @@ function receiveMessage(message, sender, sendResponse) {
         sendResponse(STATE);
         break;
       case "update_settings":
+        const prevSettings = JSON.parse(JSON.stringify(SETTINGS));
         Object.assign(SETTINGS, message.content);
         await setStorage("SETTINGS", SETTINGS);
-        STATE.softReset();
+
+        for (const sessionType of ["WORK", "BREAK", "LONG_BREAK"]) {
+          if (
+            STATE.sessionType === sessionType &&
+            prevSettings.sessionLength[sessionType] !==
+              SETTINGS.sessionLength[sessionType]
+          ) {
+            STATE.softReset();
+          }
+        }
+        // if (STATE.sessionType === 'WORK' && prevSettings.sessionLength['WORK'])
+
         sendResponse();
         break;
       case "update_state":
@@ -126,18 +146,7 @@ function receiveMessage(message, sender, sendResponse) {
           sendResponse();
           break;
         }
-
-        if (STATE.isPaused == false) {
-          STATE.pauseStartTime = Date.now();
-          STATE.isPaused = true;
-          await adjustExtensionToDefaultIconIfNecessary(STATE.sessionType, 32);
-        } else {
-          STATE.totalPausedTime += Date.now() - STATE.pauseStartTime;
-          STATE.pauseStartTime = 0;
-          STATE.isPaused = false;
-          adjustExtensionToPieIconIfNecessary();
-        }
-        STATE.currentPausedTime = 0;
+        STATE.isPaused = !STATE.isPaused;
         sendResponse();
         break;
       case "skip_session":
@@ -146,18 +155,30 @@ function receiveMessage(message, sender, sendResponse) {
           break;
         }
 
-        STATE.softReset();
-        STATE.startTime = Date.now() - STATE.sessionLength - 1000;
-        STATE.dontShowNextPopup = true;
-        if (STATE.sessionType !== "LONG_BREAK") STATE.isPaused = false;
+        switch (STATE.sessionType) {
+          case "WORK":
+            STATE.sessionRound >= SETTINGS.sessionRounds
+              ? (STATE.sessionType = "LONG_BREAK")
+              : (STATE.sessionType = "BREAK");
+            STATE.isPaused = SETTINGS.sessionAutoPauseAfterWork;
+            break;
+          case "BREAK":
+            STATE.sessionType = "WORK";
+            STATE.sessionRound++;
+            STATE.isPaused = SETTINGS.sessionAutoPauseAfterBreak;
+            break;
+          case "LONG_BREAK":
+            STATE.isPaused = true;
+            STATE.isFinished = true;
+            break;
+        }
 
+        STATE.softReset();
         sendResponse();
         break;
       case "reset_timer":
-        if (message.content.hard) {
-          STATE.hardReset();
-          await adjustExtensionToDefaultIconIfNecessary(STATE.sessionType, 32);
-        } else STATE.softReset();
+        if (message.content.hard) STATE.hardReset();
+        else STATE.softReset();
         sendResponse();
         break;
       case "log":

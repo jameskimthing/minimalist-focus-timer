@@ -9,7 +9,7 @@ chrome.offscreen.createDocument({
 // ---------------------------------------------------------------------------------------------------------------------------------
 // ADJUST CHROME EXTENSION ICON ----------------------------------------------------------------------------------------------------
 // ---------------------------------------------------------------------------------------------------------------------------------
-let oldAngle = 0;
+// let oldAngle = 0;
 /**
  * Updates the browser extension's icon if the change in time angle since the last update
  * exceeds `ANGLE_DIFF_GENERATE_ICON`. The icon is updated to a "pie" representation of the
@@ -19,43 +19,73 @@ let oldAngle = 0;
  * @param {number} sessionLength - The total length of the current session
  * @param {"WORK" | "BREAK" | "LONG_BREAK"} sessionType - The type of the current session, determining the color of the icon.
  */
-async function adjustExtensionToPieIconIfNecessary(timeLeft) {
-  if (!timeLeft) {
-    const elapsedTime = Date.now() - STATE.startTime - STATE.totalPausedTime;
-    timeLeft = Math.max(STATE.sessionLength - elapsedTime, 0);
+// async function adjustExtensionToPieIconIfNecessary(timeLeft) {
+//   if (!timeLeft) {
+//     const elapsedTime =
+//       Date.now() - STATE.startTime - STATE.totalPausedDuration;
+//     timeLeft = Math.max(STATE.sessionLength - elapsedTime, 0);
+//   }
+
+//   const newAngle = (timeLeft / STATE.sessionLength) * 360;
+//   const isAlreadyPi = STATE.currentExtensionIcon === "PIE";
+//   const isSmallAngleChange =
+//     Math.abs(oldAngle - newAngle) < ANGLE_DIFF_GENERATE_ICON;
+
+//   if (isAlreadyPi && isSmallAngleChange) return;
+
+//   oldAngle = newAngle;
+//   STATE.currentExtensionIcon = "PIE";
+
+//   const image = await sendMessage(
+//     "generate_extension_pie_icon",
+//     { iconAngle: newAngle, color: STATE.color },
+//     "offscreen"
+//   );
+//   chrome.action.setIcon({ path: image });
+// }
+
+let lastGenerated = "";
+let lastAngle = "";
+async function adjustExtensionIcon(timeLeft) {
+  if (STATE.isPaused) {
+    // Default Icon
+    if (lastGenerated === "default:" + STATE.color) return;
+
+    const image = await sendMessage(
+      "generate_extension_default_icon",
+      { color: STATE.color, size: 32 },
+      "offscreen"
+    );
+    chrome.action.setIcon({ path: image });
+
+    lastGenerated = "default:" + STATE.color;
+  } else {
+    // Pie Icon
+    const angle = (timeLeft / STATE.sessionLength) * 360;
+    const smallChange = Math.abs(lastAngle - angle) < ANGLE_DIFF_GENERATE_ICON;
+    if (lastGenerated === "pie:" + STATE.color && smallChange) return;
+
+    const image = await sendMessage(
+      "generate_extension_pie_icon",
+      { iconAngle: angle, color: STATE.color },
+      "offscreen"
+    );
+    chrome.action.setIcon({ path: image });
+
+    lastAngle = angle;
+    lastGenerated = "pie:" + STATE.color;
   }
-
-  const newAngle = (timeLeft / STATE.sessionLength) * 360;
-  const isAlreadyPi = STATE.currentExtensionIcon === "PIE";
-  const isSmallAngleChange =
-    Math.abs(oldAngle - newAngle) < ANGLE_DIFF_GENERATE_ICON;
-
-  if (isAlreadyPi && isSmallAngleChange) return;
-
-  oldAngle = newAngle;
-  STATE.currentExtensionIcon = "PIE";
-
-  const image = await sendMessage(
-    "generate_extension_pie_icon",
-    { iconAngle: newAngle, color: STATE.color },
-    "offscreen"
-  );
-  chrome.action.setIcon({ path: image });
 }
 
-/**
- * Changes to the current default icon (shown when session is paused or finished).
- * Does nothing if it is already that icon (with matching colors)
- */
-async function adjustExtensionToDefaultIconIfNecessary(sessionType, size) {
-  STATE.currentExtensionIcon = "DEFAULT";
-  const image = await sendMessage(
-    "generate_extension_default_icon",
-    { color: STATE.color, size },
-    "offscreen"
-  );
-  chrome.action.setIcon({ path: image });
-}
+// async function adjustExtensionToDefaultIconIfNecessary(sessionType, size) {
+//   STATE.currentExtensionIcon = "DEFAULT";
+//   const image = await sendMessage(
+//     "generate_extension_default_icon",
+//     { color: STATE.color, size },
+//     "offscreen"
+//   );
+//   chrome.action.setIcon({ path: image });
+// }
 
 // ---------------------------------------------------------------------------------------------------------------------------------
 // SEND MESSAGE TO popup / offscreen -----------------------------------------------------------------------------------------------
@@ -111,11 +141,14 @@ async function pushNotification(options) {
     { color: STATE.color, size: 128 },
     "offscreen"
   );
-  sendMessage(
-    "play_audio",
-    "../../assets/sounds/notification.mp3",
-    "offscreen"
-  );
+
+  if (SETTINGS.soundOnNotification) {
+    sendMessage(
+      "play_audio",
+      "../../assets/sounds/notification.mp3",
+      "offscreen"
+    );
+  }
   chrome.notifications.create(
     "",
     {

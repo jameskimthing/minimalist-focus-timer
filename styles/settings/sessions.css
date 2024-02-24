@@ -29,3 +29,9 @@
   align-items: center;
   gap: 5px;
 }
+
+#checkboxes {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}

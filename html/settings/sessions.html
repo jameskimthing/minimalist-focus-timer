@@ -24,26 +24,13 @@
   </head>
   <body>
     <form id="settingsForm">
-      <range-input
-        key="WORK"
-        name="Focus Time Length"
-        min="1"
-        max="120"
-        type="mins"
-      >
+      <range-input key="WORK" name="Focus Time Length" max="120" type="mins">
       </range-input>
-      <range-input
-        key="BREAK"
-        name="Break Time Length"
-        min="1"
-        max="60"
-        type="mins"
-      >
+      <range-input key="BREAK" name="Break Time Length" max="60" type="mins">
       </range-input>
       <range-input
         key="LONG_BREAK"
         name="Long Break Time Length"
-        min="1"
         max="60"
         type="mins"
       >
@@ -51,16 +38,32 @@
       <range-input
         key="sessionRounds"
         name="Session Rounds"
-        min="1"
         max="10"
         type="rounds"
       >
       </range-input>
 
-      <label class="checkbox-container">
-        <input class="checkbox" id="stepsByFive" type="checkbox" />
-        "Steps are by 5"
-      </label>
+      <section id="checkboxes">
+        <label class="checkbox-container">
+          <input class="checkbox" id="stepsByFive" type="checkbox" />
+          steps are by 5
+        </label>
+
+        <label class="checkbox-container">
+          <input class="checkbox" id="autoPauseAfterWork" type="checkbox" />
+          auto pause after work
+        </label>
+
+        <label class="checkbox-container">
+          <input class="checkbox" id="autoPauseAfterBreak" type="checkbox" />
+          auto pause after break
+        </label>
+
+        <label class="checkbox-container">
+          <input class="checkbox" id="soundOnNotification" type="checkbox" />
+          sound on notification
+        </label>
+      </section>
     </form>
 
     <!-- At the bottom right -->

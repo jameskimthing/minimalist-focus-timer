@@ -17,6 +17,7 @@
 - A hard reset button (start from session 1)
 - A soft reset button (redo current round)
 - A "skip timer" button (move to next session)
+- Tooltip on buttons that explains what they do
 
 ## Features to Come
 

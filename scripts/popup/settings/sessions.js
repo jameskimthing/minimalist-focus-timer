@@ -22,14 +22,49 @@
     updateRangeInputSteps(rangeInputs, SETTINGS.sessionInputRangeStep);
     sendMessage("update_settings", SETTINGS);
   });
+
+  // ---------------------------------------------------------------------------------------------------------------------------------
+  // BUTTONS -------------------------------------------------------------------------------------------------------------------------
+  // ---------------------------------------------------------------------------------------------------------------------------------
+  const pauseAfterWork = document.getElementById("autoPauseAfterWork");
+  const pauseAfterBreak = document.getElementById("autoPauseAfterBreak");
+  const soundOnNotification = document.getElementById("soundOnNotification");
+
+  if (SETTINGS.sessionAutoPauseAfterWork)
+    pauseAfterWork.setAttribute("checked", "true");
+  pauseAfterWork.addEventListener("click", async () => {
+    SETTINGS.sessionAutoPauseAfterWork = !SETTINGS.sessionAutoPauseAfterWork;
+    pauseAfterWork.getAttribute("checked")
+      ? pauseAfterWork.removeAttribute("checked")
+      : pauseAfterWork.setAttribute("checked", "true");
+    sendMessage("update_settings", SETTINGS);
+  });
+
+  if (SETTINGS.sessionAutoPauseAfterBreak)
+    pauseAfterBreak.setAttribute("checked", "true");
+  pauseAfterBreak.addEventListener("click", async () => {
+    SETTINGS.sessionAutoPauseAfterBreak = !SETTINGS.sessionAutoPauseAfterBreak;
+    pauseAfterBreak.getAttribute("checked")
+      ? pauseAfterBreak.removeAttribute("checked")
+      : pauseAfterBreak.setAttribute("checked", "true");
+    sendMessage("update_settings", SETTINGS);
+  });
+
+  if (SETTINGS.soundOnNotification)
+    soundOnNotification.setAttribute("checked", "true");
+  soundOnNotification.addEventListener("click", async () => {
+    SETTINGS.soundOnNotification = !SETTINGS.soundOnNotification;
+    soundOnNotification.getAttribute("checked")
+      ? soundOnNotification.removeAttribute("checked")
+      : soundOnNotification.setAttribute("checked", "true");
+    sendMessage("update_settings", SETTINGS);
+  });
 })();
 
 function updateRangeInputSteps(rangeInputs, step) {
   for (const rangeInput of rangeInputs) {
     const inputType = rangeInput.getAttribute("type");
     if (inputType === "rounds") continue;
-
-    console.log("set step to: " + step);
     rangeInput.setAttribute("step", step);
   }
 }

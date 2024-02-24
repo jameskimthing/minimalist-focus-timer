@@ -10,11 +10,8 @@ class RangeInput extends HTMLElement {
       const name = this.getAttribute("name");
       const key = this.getAttribute("key");
       const max = this.getAttribute("max") || 100;
-      let min = this.getAttribute("min") || 1;
       const type = this.getAttribute("type") || "mins";
       const step = this.getAttribute("step") || 1;
-
-      min = 0;
 
       let value;
       switch (type) {
