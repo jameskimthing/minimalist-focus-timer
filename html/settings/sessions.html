@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" type="text/css" href="../../styles/styles.css" />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="../../styles/settings/sessions.css"
+    />
+
+    <!-- Scripts -->
+    <script src="../../scripts/popup/values.js"></script>
+    <script src="../../scripts/popup/utils.js"></script>
+    <script src="../../scripts/popup/settings/index.js"></script>
+
+    <script defer src="../../components/SvgButton.js"></script>
+    <script defer src="../../components/InfoTooltip.js"></script>
+    <script defer src="../../components/RangeInput.js"></script>
+  </head>
+  <body>
+    <form id="settingsForm">
+      <range-input
+        key="workSessionLength"
+        name="Focus Time Length"
+        min="1"
+        max="12"
+        type="mins"
+      >
+      </range-input>
+      <range-input
+        key="breakSessionLength"
+        name="Break Time Length"
+        min="1"
+        max="60"
+        type="mins"
+      >
+      </range-input>
+      <range-input
+        key="longBreakSessionLength"
+        name="Long Break Time Length"
+        min="1"
+        max="60"
+        type="mins"
+      >
+      </range-input>
+      <range-input
+        key="sessionRounds"
+        name="Session Rounds"
+        min="1"
+        max="10"
+        type="rounds"
+      >
+      </range-input>
+    </form>
+
+    <!-- At the bottom right -->
+    <a href="../index.html">
+      <info-tooltip text="settings" direction="left">
+        <svg-button
+          id="settingsPageButton"
+          icon-name="settings"
+          size="20px"
+        ></svg-button>
+      </info-tooltip>
+    </a>
+
+    <!-- GIVE ME A STAR!!! -->
+    <a
+      href="https://github.com/jameskimthing/pomodoro-focus-timer"
+      target="_blank"
+    >
+      <info-tooltip text="give me a star on github!" direction="right">
+        <svg-button id="githubLink" icon-name="github" size="20px">
+        </svg-button>
+      </info-tooltip>
+    </a>
+  </body>
+</html>

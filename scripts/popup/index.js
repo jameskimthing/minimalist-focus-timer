@@ -10,7 +10,7 @@
   Object.assign(STATE, state);
 
   // Using `SETTINGS`, adjusts the settings ui and adds event listeners to each input
-  initializeSettingsPage();
+  // initializeSettingsPage();
 
   adjustUiToState();
   function updateTimerUi() {

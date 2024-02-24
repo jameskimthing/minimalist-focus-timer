@@ -5,9 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" type="text/css" href="../styles/styles.css" />
-    <link rel="stylesheet" type="text/css" href="../styles/general.css" />
     <link rel="stylesheet" type="text/css" href="../styles/timer.css" />
-    <link rel="stylesheet" type="text/css" href="../styles/settings.css" />
 
     <!-- Scripts -->
     <script src="../scripts/popup/values.js"></script>
@@ -17,7 +15,6 @@
     <script defer src="../components/InfoTooltip.js"></script>
 
     <script defer src="../scripts/popup/uiAdjust.js"></script>
-    <script defer src="../scripts/popup/settingsPage.js"></script>
     <script defer src="../scripts/popup/buttons.js"></script>
     <script defer src="../scripts/popup/index.js"></script>
   </head>
@@ -77,21 +74,22 @@
     </info-tooltip>
 
     <!-- At the bottom right -->
-    <info-tooltip text="settings" direction="left">
-      <svg-button
-        id="settingsPageButton"
-        icon-name="settings"
-        size="20px"
-      ></svg-button>
-    </info-tooltip>
+    <a href="./settings/sessions.html">
+      <info-tooltip text="settings" direction="left">
+        <svg-button
+          id="settingsPageButton"
+          icon-name="settings"
+          size="20px"
+        ></svg-button>
+      </info-tooltip>
+    </a>
 
     <!-- Settings Page -->
-    <div id="settingsPage">
+    <!-- Go give a star to my github repo -->
+    <!-- <div id="settingsPage">
       <form id="settingsForm">
-        <!-- Items to be added here by settingsPage.js -->
       </form>
 
-      <!-- Go give a star to my github repo -->
       <a
         href="https://github.com/jameskimthing/pomodoro-focus-timer"
         target="_blank"
@@ -99,6 +97,6 @@
         <svg-button id="githubLink" icon-name="github" size="20px">
         </svg-button>
       </a>
-    </div>
+    </div> -->
   </body>
 </html>

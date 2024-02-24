@@ -103,13 +103,6 @@ BUTTONS ------------------------------------------------------------------------
 }
 
 /* Bottom left && right */
-#settingsPageButton {
-  position: absolute;
-  bottom: 6px;
-  right: 10px;
-  z-index: 1;
-}
-
 #timerHardResetButton {
   position: absolute;
   bottom: 6px;

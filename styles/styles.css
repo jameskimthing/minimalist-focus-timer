@@ -16,4 +16,24 @@ body {
   background-color: var(--color-background);
   color: var(--color-gray);
   padding: 1rem;
+
+  width: 250px;
+  height: 320px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+/* 
+---------------------------------------------------------------------------------------------------------------------------------
+USED GLOBALLY -------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------------------------
+*/
+#settingsPageButton {
+  position: absolute;
+  bottom: 6px;
+  right: 10px;
+  z-index: 1;
 }

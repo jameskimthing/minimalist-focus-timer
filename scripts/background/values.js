@@ -3,7 +3,7 @@ const TIMER_PADDING = 990;
 
 // NOTE: Colors also present at /styles/styles.css
 // When updating these, update there too
-// TODO: integrate this to SETTINGS, and add to settingsPage.js too
+// TODO: integrate this to SETTINGS, and add to settings page too
 //   reason: for future feature of having customizable colors
 const COLORS = {
   background: "#2E4057",

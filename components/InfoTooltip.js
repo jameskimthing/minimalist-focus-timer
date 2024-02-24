@@ -40,9 +40,6 @@ class InfoTooltip extends HTMLElement {
     const tooltip = this.shadowRoot.querySelector(".tooltip");
     this.matchLocationWithDirection(slot, tooltip, direction, distance);
 
-    // const slotRect = slot.getBoundingClientRect();
-    // const tooltipRect = tooltip.getBoundingClientRect();
-
     let timeout;
     slot.addEventListener("mouseenter", () => {
       timeout = setTimeout(() => {
@@ -92,21 +89,6 @@ class InfoTooltip extends HTMLElement {
         throw new Error("Invalid direction");
     }
   }
-
-  // Prob not necessary, but for good measure
-  // static get observedAttributes() {
-  //   return ["text", "direction"];
-  // }
-
-  // attributeChangedCallback(name, oldValue, newValue) {
-  //   if (oldValue !== newValue) {
-  //     this.updateComponent();
-  //   }
-  // }
 }
 
 customElements.define("info-tooltip", InfoTooltip);
-
-const _infoTooltipStyles = `
-
-`;
