@@ -29,13 +29,12 @@ class RangeInput extends HTMLElement {
     let value;
     switch (type) {
       case "mins":
-        value = (SETTINGS[key] - TIMER_PADDING) / 60 / 1000;
+        value = (SETTINGS.sessionLength[key] - TIMER_PADDING) / 60 / 1000;
         break;
       case "rounds":
         value = SETTINGS[key];
         break;
     }
-    console.log("update value: " + key + ": " + value);
 
     this.shadowRoot.innerHTML = `
     <style>
@@ -69,7 +68,7 @@ class RangeInput extends HTMLElement {
         <span name="inputInfoName">${name}</span>
         <span name="inputInfoValue"></span>
       </div>
-      <input type="range" name="workSessionLength" min="${min}" max="${max}" step="1" value="${value}">
+      <input type="range" name="sessionLength" min="${min}" max="${max}" step="1" value="${value}">
     </div>`;
   }
 

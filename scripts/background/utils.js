@@ -35,24 +35,9 @@ async function adjustExtensionToPieIconIfNecessary(timeLeft) {
   oldAngle = newAngle;
   STATE.currentExtensionIcon = "PIE";
 
-  // TODO: This code is repeated across many places in the app. Integrate `COLORS` to
-  // `SETTINGS`, and add a built-in function called something like `STATE.getCurrentColor`
-  let color;
-  switch (STATE.sessionType) {
-    case "WORK":
-      color = COLORS.sessions.work;
-      break;
-    case "BREAK":
-      color = COLORS.sessions.break;
-      break;
-    case "LONG_BREAK":
-      color = COLORS.sessions.longBreak;
-      break;
-  }
-
   const image = await sendMessage(
     "generate_extension_pie_icon",
-    { iconAngle: newAngle, color },
+    { iconAngle: newAngle, color: STATE.color },
     "offscreen"
   );
   chrome.action.setIcon({ path: image });
@@ -63,23 +48,10 @@ async function adjustExtensionToPieIconIfNecessary(timeLeft) {
  * Does nothing if it is already that icon (with matching colors)
  */
 async function adjustExtensionToDefaultIconIfNecessary(sessionType, size) {
-  let color;
-  switch (sessionType) {
-    case "WORK":
-      color = COLORS.sessions.work;
-      break;
-    case "BREAK":
-      color = COLORS.sessions.break;
-      break;
-    case "LONG_BREAK":
-      color = COLORS.sessions.longBreak;
-      break;
-  }
-
   STATE.currentExtensionIcon = "DEFAULT";
   const image = await sendMessage(
     "generate_extension_default_icon",
-    { color, size },
+    { color: STATE.color, size },
     "offscreen"
   );
   chrome.action.setIcon({ path: image });
@@ -134,22 +106,9 @@ async function pushNotification(options) {
     return;
   }
 
-  let color;
-  switch (STATE.sessionType) {
-    case "WORK":
-      color = COLORS.sessions.work;
-      break;
-    case "BREAK":
-      color = COLORS.sessions.break;
-      break;
-    case "LONG_BREAK":
-      color = COLORS.sessions.longBreak;
-      break;
-  }
-
   const image = await sendMessage(
     "generate_extension_default_icon",
-    { color: color, size: 128 },
+    { color: STATE.color, size: 128 },
     "offscreen"
   );
   sendMessage(

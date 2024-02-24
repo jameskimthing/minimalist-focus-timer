@@ -1,27 +1,23 @@
 /** To show the latest "time" for some time. ex: show 1:00 for 0.990 seconds before continuing */
 const TIMER_PADDING = 990;
-
-// NOTE: Colors also present at /styles/styles.css
-// When updating these, update there too
-// TODO: integrate this to SETTINGS, and add to settings page too
-//   reason: for future feature of having customizable colors
-const COLORS = {
-  background: "#2E4057",
-  gray: "#D8D4F2",
-  sessions: {
-    work: "#0197F6",
-    break: "#70B77E",
-    longBreak: "#EB5E28",
-  },
-};
-
 const ANGLE_DIFF_GENERATE_ICON = 5;
 
 const SETTINGS = {
-  workSessionLength: 25 * 60 * 1000 + TIMER_PADDING,
-  breakSessionLength: 5 * 60 * 1000 + TIMER_PADDING,
-  longBreakSessionLength: 15 * 60 * 1000 + TIMER_PADDING,
   sessionRounds: 4,
+  sessionInputRangeStep: 1,
+  sessionLength: {
+    WORK: 25 * 60 * 1000 + TIMER_PADDING,
+    BREAK: 5 * 60 * 1000 + TIMER_PADDING,
+    LONG_BREAK: 15 * 60 * 1000 + TIMER_PADDING,
+  },
+  colors: {
+    background: "#2E4057",
+    gray: "#D8D4F2",
+
+    WORK: "#0197F6",
+    BREAK: "#70B77E",
+    LONG_BREAK: "#EB5E28",
+  },
 };
 
 const STATE = {
@@ -29,12 +25,18 @@ const STATE = {
   startTime: 0,
   pauseStartTime: 0,
   totalPausedTime: 0,
-  currentPausedTime: 0,
+  currentPausedTime: 0, // used within background/index.js
   sessionType: "WORK", // 'WORK', 'BREAK', 'LONG_BREAK',
-  sessionLength: 0,
-  currentSessionRound: 1,
+  sessionRound: 1,
   isFinished: false,
   dontShowNextPopup: false,
+
+  get sessionLength() {
+    return SETTINGS.sessionLength[this.sessionType];
+  },
+  get color() {
+    return SETTINGS.colors[this.sessionType];
+  },
 
   // ExtensionIcon
   currentExtensionIcon: "DEFAULT", // 'DEFAULT', 'PIE'
@@ -51,8 +53,7 @@ const STATE = {
     this.softReset();
     this.isPaused = true;
     this.sessionType = "WORK";
-    this.sessionLength = SETTINGS.workSessionLength;
-    this.currentSessionRound = 1;
+    this.sessionRound = 1;
     this.isFinished = false;
   },
 };

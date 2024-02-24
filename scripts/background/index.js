@@ -10,12 +10,6 @@
 let INITIALIZED = false;
 (async () => {
   Object.assign(SETTINGS, await getStorage("SETTINGS"));
-
-  // For debugging:
-  // SETTINGS.workSessionLength = 0.1 * 60 * 1000 + TIMER_PADDING;
-  // SETTINGS.breakSessionLength = 0.1 * 60 * 1000 + TIMER_PADDING;
-  // SETTINGS.longBreakSessionLength = 0.1 * 60 * 1000 + TIMER_PADDING;
-
   Object.assign(STATE, {
     isPaused: true,
     startTime: Date.now(),
@@ -23,8 +17,7 @@ let INITIALIZED = false;
     totalPausedTime: 0,
     currentPausedTime: 0,
     sessionType: "WORK", // 'WORK', 'BREAK', 'LONG_BREAK',
-    sessionLength: SETTINGS.workSessionLength,
-    currentSessionRound: 1,
+    sessionRound: 1,
   });
 
   INITIALIZED = true;
@@ -59,32 +52,26 @@ setInterval(() => {
   if (timeLeft <= 0) {
     switch (STATE.sessionType) {
       case "WORK":
-        if (STATE.currentSessionRound >= SETTINGS.sessionRounds) {
+        if (STATE.sessionRound >= SETTINGS.sessionRounds) {
           STATE.sessionType = "LONG_BREAK";
-          STATE.sessionLength = SETTINGS.longBreakSessionLength;
-
           pushNotification({
             title: `Focus time finished`,
-            message: `Completed work round ${STATE.currentSessionRound} / ${SETTINGS.sessionRounds}. Take a long break`,
+            message: `Completed work round ${STATE.sessionRound} / ${SETTINGS.sessionRounds}. Take a long break`,
           });
         } else {
           STATE.sessionType = "BREAK";
-          STATE.sessionLength = SETTINGS.breakSessionLength;
-
           pushNotification({
             title: `Focus time finished`,
-            message: `Completed work round ${STATE.currentSessionRound} / ${SETTINGS.sessionRounds}. Take a break`,
+            message: `Completed work round ${STATE.sessionRound} / ${SETTINGS.sessionRounds}. Take a break`,
           });
         }
         break;
       case "BREAK":
         STATE.sessionType = "WORK";
-        STATE.sessionLength = SETTINGS.workSessionLength;
-        STATE.currentSessionRound++;
-
+        STATE.sessionRound++;
         pushNotification({
           title: `Break time finished`,
-          message: `Starting work session ${STATE.currentSessionRound} / ${SETTINGS.sessionRounds}`,
+          message: `Starting work session ${STATE.sessionRound} / ${SETTINGS.sessionRounds}`,
         });
         break;
       case "LONG_BREAK":
@@ -127,20 +114,6 @@ function receiveMessage(message, sender, sendResponse) {
       case "update_settings":
         Object.assign(SETTINGS, message.content);
         await setStorage("SETTINGS", SETTINGS);
-
-        // Update STATE accordingly after SETTINGS change
-        switch (STATE.sessionType) {
-          case "WORK":
-            STATE.sessionLength = SETTINGS.workSessionLength;
-            break;
-          case "BREAK":
-            STATE.sessionLength = SETTINGS.breakSessionLength;
-            break;
-          case "LONG_BREAK":
-            STATE.sessionLength = SETTINGS.longBreakSessionLength;
-            break;
-        }
-
         STATE.softReset();
         sendResponse();
         break;

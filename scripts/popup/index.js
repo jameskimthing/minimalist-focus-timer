@@ -44,7 +44,7 @@ function adjustUiToState() {
   adjustTimerSessionType(STATE.sessionType);
   adjustTimerTimeLeft(timeLeft);
   adjustPlayPauseButton(STATE.isPaused);
-  adjustSessionRound(STATE.currentSessionRound, SETTINGS.sessionRounds);
+  adjustSessionRound(STATE.sessionRound, SETTINGS.sessionRounds);
 }
 
 // ---------------------------------------------------------------------------------------------------------------------------------
