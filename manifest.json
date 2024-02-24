@@ -12,7 +12,7 @@
         "offscreen"
     ],
     "action": {
-        "default_popup": "index.html"
+        "default_popup": "html/index.html"
     },
     "icons": {
         "32": "assets/icons/32.png",
