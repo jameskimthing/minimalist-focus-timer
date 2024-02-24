@@ -1,3 +1,7 @@
+/**
+ * This is too specific to be a web component.
+ * TODO: Generalize
+ */
 class RangeInput extends HTMLElement {
   constructor() {
     super();
@@ -82,12 +86,9 @@ class RangeInput extends HTMLElement {
 
     switch (type) {
       case "mins":
-        inputInfoValue.innerText = durationToString(
-          slider.value * 60 * 1000 + TIMER_PADDING,
-          { isVerbose: true }
-        );
-
-        SETTINGS[key] = slider.value * 60 * 1000 + TIMER_PADDING;
+        const value = slider.value * 60 * 1000 + TIMER_PADDING;
+        inputInfoValue.innerText = durationToString(value, { isVerbose: true });
+        SETTINGS.sessionLength[key] = value;
         break;
       case "rounds":
         inputInfoValue.innerText =

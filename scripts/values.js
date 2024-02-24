@@ -37,6 +37,8 @@ const STATE = {
   get color() {
     return SETTINGS.colors[this.sessionType];
   },
+  set sessionLength(_) {},
+  set color(_) {},
 
   // ExtensionIcon
   currentExtensionIcon: "DEFAULT", // 'DEFAULT', 'PIE'
