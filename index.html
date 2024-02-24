@@ -5,13 +5,17 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" type="text/css" href="styles/styles.css" />
+    <link rel="stylesheet" type="text/css" href="styles/general.css" />
     <link rel="stylesheet" type="text/css" href="styles/timer.css" />
     <link rel="stylesheet" type="text/css" href="styles/settings.css" />
 
     <!-- Scripts -->
     <script src="scripts/popup/values.js"></script>
     <script src="scripts/popup/utils.js"></script>
+
     <script defer src="components/SvgButton.js"></script>
+    <script defer src="components/InfoTooltip.js"></script>
+
     <script defer src="scripts/popup/uiAdjust.js"></script>
     <script defer src="scripts/popup/settingsPage.js"></script>
     <script defer src="scripts/popup/buttons.js"></script>
@@ -40,36 +44,46 @@
 
     <!-- Timer Controls -->
     <div class="timer-controls-container">
-      <svg-button
-        id="timerSoftResetButton"
-        icon-name="softReset"
-        size="33px"
-      ></svg-button>
-      <svg-button
-        id="timerPlayPauseButton"
-        icon-name="play"
-        size="40px"
-      ></svg-button>
-      <svg-button
-        id="timerSkipButton"
-        icon-name="skip"
-        size="38px"
-      ></svg-button>
+      <info-tooltip text="redo current session" direction="bottom">
+        <svg-button
+          id="timerSoftResetButton"
+          icon-name="softReset"
+          size="33px"
+        ></svg-button>
+      </info-tooltip>
+      <info-tooltip text="play / pause" direction="bottom">
+        <svg-button
+          id="timerPlayPauseButton"
+          icon-name="play"
+          size="40px"
+        ></svg-button>
+      </info-tooltip>
+      <info-tooltip text="skip current session" direction="bottom">
+        <svg-button
+          id="timerSkipButton"
+          icon-name="skip"
+          size="38px"
+        ></svg-button>
+      </info-tooltip>
     </div>
 
     <!-- At the bottom left -->
-    <svg-button
-      id="timerHardResetButton"
-      icon-name="hardReset"
-      size="23px"
-    ></svg-button>
+    <info-tooltip text="start from session 1" direction="right">
+      <svg-button
+        id="timerHardResetButton"
+        icon-name="hardReset"
+        size="23px"
+      ></svg-button>
+    </info-tooltip>
 
     <!-- At the bottom right -->
-    <svg-button
-      id="settingsPageButton"
-      icon-name="settings"
-      size="20px"
-    ></svg-button>
+    <info-tooltip text="settings" direction="left">
+      <svg-button
+        id="settingsPageButton"
+        icon-name="settings"
+        size="20px"
+      ></svg-button>
+    </info-tooltip>
 
     <!-- Settings Page -->
     <div id="settingsPage">
