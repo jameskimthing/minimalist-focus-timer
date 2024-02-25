@@ -1,70 +1,78 @@
 (async () => {
   await ensureInitialized();
   const rangeInputs = document.querySelectorAll("range-input");
-  const stepsByFive = document.getElementById("stepsByFive");
-
-  if (SETTINGS.sessionInputRangeStep === 5) {
-    stepsByFive.setAttribute("checked", "true");
-    updateRangeInputSteps(rangeInputs, SETTINGS.sessionInputRangeStep);
-  }
-
-  stepsByFive.addEventListener("click", async () => {
-    if (stepsByFive.getAttribute("checked")) {
-      stepsByFive.removeAttribute("checked");
-      SETTINGS.sessionInputRangeStep = 1;
-    } else {
-      stepsByFive.setAttribute("checked", "true");
-      SETTINGS.sessionInputRangeStep = 5;
-    }
-
-    console.log(SETTINGS);
-
-    updateRangeInputSteps(rangeInputs, SETTINGS.sessionInputRangeStep);
-    sendMessage("update_settings", SETTINGS);
-  });
 
   // ---------------------------------------------------------------------------------------------------------------------------------
-  // BUTTONS -------------------------------------------------------------------------------------------------------------------------
+  // RANGE INPUTS --------------------------------------------------------------------------------------------------------------------
+  // ---------------------------------------------------------------------------------------------------------------------------------
+  const rangeWorkLength = document.getElementById("rangeWorkLength");
+  const rangeBreakLength = document.getElementById("rangeBreakLength");
+  const rangeLongBreakLength = document.getElementById("rangeLongBreakLength");
+  const rangeRounds = document.getElementById("rangeRounds");
+
+  updateRangeInput(rangeWorkLength);
+  updateRangeInput(rangeBreakLength);
+  updateRangeInput(rangeLongBreakLength);
+  updateRangeInput(rangeRounds);
+
+  // FUNCTIONS -----------------------------------------------------------------------------------------------------------------------
+  function updateRangeInput(element) {
+    const type = element.getAttribute("type");
+    const key = element.getAttribute("key");
+
+    const val = (SETTINGS.sessionLength[key] - TIMER_PADDING) / 60 / 1000;
+    type === "mins"
+      ? element.setAttribute("value", val)
+      : element.setAttribute("value", SETTINGS[key]);
+
+    element.addEventListener("range-input", (event) => {
+      const val = event.detail.value * 60 * 1000 + TIMER_PADDING;
+      type === "mins"
+        ? (SETTINGS.sessionLength[key] = val)
+        : (SETTINGS[key] = event.detail.value);
+      sendMessage("update_settings", SETTINGS);
+    });
+  }
+
+  // ---------------------------------------------------------------------------------------------------------------------------------
+  // CHECKBOXES ----------------------------------------------------------------------------------------------------------------------
   // ---------------------------------------------------------------------------------------------------------------------------------
   const pauseAfterWork = document.getElementById("autoPauseAfterWork");
   const pauseAfterBreak = document.getElementById("autoPauseAfterBreak");
   const soundOnNotification = document.getElementById("soundOnNotification");
+  const stepsByFive = document.getElementById("stepsByFive");
 
-  if (SETTINGS.sessionAutoPauseAfterWork)
-    pauseAfterWork.setAttribute("checked", "true");
-  pauseAfterWork.addEventListener("click", async () => {
-    SETTINGS.sessionAutoPauseAfterWork = !SETTINGS.sessionAutoPauseAfterWork;
-    pauseAfterWork.getAttribute("checked")
-      ? pauseAfterWork.removeAttribute("checked")
-      : pauseAfterWork.setAttribute("checked", "true");
-    sendMessage("update_settings", SETTINGS);
+  updateCheckbox(pauseAfterWork, true, "sessionAutoPauseAfterWork");
+  updateCheckbox(pauseAfterBreak, true, "sessionAutoPauseAfterBreak");
+  updateCheckbox(soundOnNotification, true, "soundOnNotification");
+  updateCheckbox(stepsByFive, 5, "sessionInputRangeStep", () => {
+    stepsByFive.getAttribute("checked")
+      ? (SETTINGS.sessionInputRangeStep = 1)
+      : (SETTINGS.sessionInputRangeStep = 5);
+    updateRangeInputSteps();
   });
+  if (SETTINGS.sessionInputRangeStep === 5) updateRangeInputSteps();
 
-  if (SETTINGS.sessionAutoPauseAfterBreak)
-    pauseAfterBreak.setAttribute("checked", "true");
-  pauseAfterBreak.addEventListener("click", async () => {
-    SETTINGS.sessionAutoPauseAfterBreak = !SETTINGS.sessionAutoPauseAfterBreak;
-    pauseAfterBreak.getAttribute("checked")
-      ? pauseAfterBreak.removeAttribute("checked")
-      : pauseAfterBreak.setAttribute("checked", "true");
-    sendMessage("update_settings", SETTINGS);
-  });
-
-  if (SETTINGS.soundOnNotification)
-    soundOnNotification.setAttribute("checked", "true");
-  soundOnNotification.addEventListener("click", async () => {
-    SETTINGS.soundOnNotification = !SETTINGS.soundOnNotification;
-    soundOnNotification.getAttribute("checked")
-      ? soundOnNotification.removeAttribute("checked")
-      : soundOnNotification.setAttribute("checked", "true");
-    sendMessage("update_settings", SETTINGS);
-  });
-})();
-
-function updateRangeInputSteps(rangeInputs, step) {
-  for (const rangeInput of rangeInputs) {
-    const inputType = rangeInput.getAttribute("type");
-    if (inputType === "rounds") continue;
-    rangeInput.setAttribute("step", step);
+  // FUNCTIONS -----------------------------------------------------------------------------------------------------------------------
+  function updateRangeInputSteps() {
+    for (const rangeInput of rangeInputs) {
+      const inputType = rangeInput.getAttribute("type");
+      if (inputType === "rounds") continue;
+      rangeInput.setAttribute("step", SETTINGS.sessionInputRangeStep);
+    }
   }
-}
+  /** Updates "checked" state of checkbox whenever clicked, matches SETTINGS */
+  function updateCheckbox(element, checkedValue, settingsAttribute, onClick) {
+    if (SETTINGS[settingsAttribute] === checkedValue) {
+      element.setAttribute("checked", "true");
+    }
+    element.addEventListener("click", async () => {
+      if (onClick) onClick(element);
+      else SETTINGS[settingsAttribute] = !SETTINGS[settingsAttribute];
+      element.getAttribute("checked")
+        ? element.removeAttribute("checked")
+        : element.setAttribute("checked", "true");
+      sendMessage("update_settings", SETTINGS);
+    });
+  }
+})();

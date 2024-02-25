@@ -16,19 +16,32 @@
     <script src="../../scripts/popup/utils.js"></script>
     <script src="../../scripts/popup/settings/index.js"></script>
 
+    <script defer src="../../components/RangeInput.js"></script>
     <script defer src="../../components/SvgButton.js"></script>
     <script defer src="../../components/InfoTooltip.js"></script>
-    <script defer src="../../components/RangeInput.js"></script>
 
     <script defer src="../../scripts/popup/settings/sessions.js"></script>
   </head>
   <body>
     <form id="settingsForm">
-      <range-input key="WORK" name="Focus Time Length" max="120" type="mins">
-      </range-input>
-      <range-input key="BREAK" name="Break Time Length" max="60" type="mins">
+      <range-input
+        id="rangeWorkLength"
+        key="WORK"
+        name="Focus Time Length"
+        max="120"
+        type="mins"
+      >
       </range-input>
       <range-input
+        id="rangeBreakLength"
+        key="BREAK"
+        name="Break Time Length"
+        max="60"
+        type="mins"
+      >
+      </range-input>
+      <range-input
+        id="rangeLongBreakLength"
         key="LONG_BREAK"
         name="Long Break Time Length"
         max="60"
@@ -36,6 +49,7 @@
       >
       </range-input>
       <range-input
+        id="rangeRounds"
         key="sessionRounds"
         name="Session Rounds"
         max="10"

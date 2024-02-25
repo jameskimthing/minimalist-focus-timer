@@ -1,49 +1,17 @@
-// TODO
-// Doesnt actually need "BLOBS" reason, but is just there so "AUDIO_PLAYBACK" wont be suspended after 30 seconds
-chrome.offscreen.createDocument({
-  url: chrome.runtime.getURL("../../html/offscreen.html"),
-  reasons: ["AUDIO_PLAYBACK", "BLOBS"],
-  justification: "notification",
-});
+let _offscreenMade = false;
+if (!_offscreenMade) {
+  // Doesnt actually need "BLOBS" reason, but is just there so "AUDIO_PLAYBACK" wont be suspended after 30 seconds
+  chrome.offscreen.createDocument({
+    url: chrome.runtime.getURL("../../html/offscreen.html"),
+    reasons: ["AUDIO_PLAYBACK", "BLOBS"],
+    justification: "notification",
+  });
+  _offscreenMade = true;
+}
 
 // ---------------------------------------------------------------------------------------------------------------------------------
 // ADJUST CHROME EXTENSION ICON ----------------------------------------------------------------------------------------------------
 // ---------------------------------------------------------------------------------------------------------------------------------
-// let oldAngle = 0;
-/**
- * Updates the browser extension's icon if the change in time angle since the last update
- * exceeds `ANGLE_DIFF_GENERATE_ICON`. The icon is updated to a "pie" representation of the
- * session's progress with a specific color depending on the session type.
- *
- * @param {number} timeLeft - The amount of time remaining in the current session
- * @param {number} sessionLength - The total length of the current session
- * @param {"WORK" | "BREAK" | "LONG_BREAK"} sessionType - The type of the current session, determining the color of the icon.
- */
-// async function adjustExtensionToPieIconIfNecessary(timeLeft) {
-//   if (!timeLeft) {
-//     const elapsedTime =
-//       Date.now() - STATE.startTime - STATE.totalPausedDuration;
-//     timeLeft = Math.max(STATE.sessionLength - elapsedTime, 0);
-//   }
-
-//   const newAngle = (timeLeft / STATE.sessionLength) * 360;
-//   const isAlreadyPi = STATE.currentExtensionIcon === "PIE";
-//   const isSmallAngleChange =
-//     Math.abs(oldAngle - newAngle) < ANGLE_DIFF_GENERATE_ICON;
-
-//   if (isAlreadyPi && isSmallAngleChange) return;
-
-//   oldAngle = newAngle;
-//   STATE.currentExtensionIcon = "PIE";
-
-//   const image = await sendMessage(
-//     "generate_extension_pie_icon",
-//     { iconAngle: newAngle, color: STATE.color },
-//     "offscreen"
-//   );
-//   chrome.action.setIcon({ path: image });
-// }
-
 let lastGenerated = "";
 let lastAngle = "";
 async function adjustExtensionIcon(timeLeft) {
@@ -76,16 +44,6 @@ async function adjustExtensionIcon(timeLeft) {
     lastGenerated = "pie:" + STATE.color;
   }
 }
-
-// async function adjustExtensionToDefaultIconIfNecessary(sessionType, size) {
-//   STATE.currentExtensionIcon = "DEFAULT";
-//   const image = await sendMessage(
-//     "generate_extension_default_icon",
-//     { color: STATE.color, size },
-//     "offscreen"
-//   );
-//   chrome.action.setIcon({ path: image });
-// }
 
 // ---------------------------------------------------------------------------------------------------------------------------------
 // SEND MESSAGE TO popup / offscreen -----------------------------------------------------------------------------------------------
@@ -131,11 +89,6 @@ async function sendMessage(action, content, target = "popup") {
  * @param {string} options.message The message body of the notification.
  */
 async function pushNotification(options) {
-  if (STATE.dontShowNextPopup) {
-    STATE.dontShowNextPopup = false;
-    return;
-  }
-
   const image = await sendMessage(
     "generate_extension_default_icon",
     { color: STATE.color, size: 128 },

@@ -1,8 +1,3 @@
-// Bug exploit to keep service worker alive
-// const keepAlive = () => setInterval(chrome.runtime.getPlatformInfo, 20e3);
-// chrome.runtime.onStartup.addListener(keepAlive);
-// keepAlive();
-
 // ---------------------------------------------------------------------------------------------------------------------------------
 // INITIALIZE VALUES ---------------------------------------------------------------------------------------------------------------
 // ---------------------------------------------------------------------------------------------------------------------------------
@@ -22,8 +17,6 @@ let INITIALIZED = false;
   });
 
   INITIALIZED = true;
-
-  // chrome.action.setIcon({ path: "../../something.png" });
 })();
 
 /** Waits until all values are initialized */

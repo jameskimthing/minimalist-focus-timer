@@ -34,7 +34,6 @@ const STATE = {
   sessionType: "WORK", // 'WORK', 'BREAK', 'LONG_BREAK',
   sessionRound: 1,
   isFinished: false,
-  dontShowNextPopup: false,
 
   get sessionLength() {
     return SETTINGS.sessionLength[this.sessionType];
