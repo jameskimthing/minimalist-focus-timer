@@ -1,15 +1,9 @@
-/**
- * This is too specific to be a web component.
- * TODO: Generalize
- */
 class RangeInput extends HTMLElement {
   constructor() {
     super();
     this.attachShadow({ mode: "open" });
 
     const name = this.getAttribute("name");
-
-    console.log("WHAT NAME: " + name);
 
     const max = this.getAttribute("max") || 100;
     const step = this.getAttribute("step") || 1;
@@ -28,19 +22,43 @@ class RangeInput extends HTMLElement {
           display: flex;
           justify-content: space-between;
           margin-bottom: 0.5rem;
-          margin-left: 2px;
           width: 100%;
+          font-size: 14px;
         }
         
         input {
+          margin-left: -2px;
           width: 100%;
           height: 5px;
-          background: #ddd;
+          background: transparent;
           outline: none;
-          opacity: 0.7;
           cursor: pointer;
+          border-radius: 10px;
         }
-      </style>
+
+        input::-moz-range-track,
+        input::-moz-range-progress {
+          width: 100%;
+          height: 100%;
+          border-radius: 10px;
+          background: #4a5d79;
+        }
+
+        input::-moz-range-progress {
+          background: var(--color-current-session);
+        }
+
+        input::-moz-range-thumb {
+          appearance: none;
+          margin: 0;
+          height: 12px;
+          width: 12px;
+          background: var(--color-current-session);
+          border-radius: 100%;
+          border: 0;
+        }
+        
+        </style>
     
       <div class="settings-slider-wrapper">
         <div class="settings-slider-info-wrapper">

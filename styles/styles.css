@@ -10,6 +10,10 @@
   --color-session-long-break: #eb5e28;
 
   --color-current-session: var(--color-session-work);
+
+  font-family: "Roboto";
+  font-weight: 400;
+  font-style: normal;
 }
 
 body {

@@ -10,6 +10,12 @@
       type="text/css"
       href="../../styles/settings/sessions.css"
     />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
+      rel="stylesheet"
+    />
 
     <!-- Scripts -->
     <script src="../../scripts/values.js"></script>
@@ -19,6 +25,7 @@
     <script defer src="../../components/RangeInput.js"></script>
     <script defer src="../../components/SvgButton.js"></script>
     <script defer src="../../components/InfoTooltip.js"></script>
+    <script defer src="../../components/CheckboxInput.js"></script>
 
     <script defer src="../../scripts/popup/settings/sessions.js"></script>
   </head>
@@ -58,12 +65,26 @@
       </range-input>
 
       <section id="checkboxes">
-        <label class="checkbox-container">
+        <!-- <label class="checkbox-container">
           <input class="checkbox" id="stepsByFive" type="checkbox" />
           steps are by 5
-        </label>
+        </label> -->
+        <checkbox-input id="stepsByFive" label="steps are by 5">
+        </checkbox-input>
+        <checkbox-input
+          id="autoPauseAfterWork"
+          label="auto pause after work"
+        ></checkbox-input>
+        <checkbox-input
+          id="autoPauseAfterBreak"
+          label="auto pause after break"
+        ></checkbox-input>
+        <checkbox-input
+          id="soundOnNotification"
+          label="sound on notification"
+        ></checkbox-input>
 
-        <label class="checkbox-container">
+        <!-- <label class="checkbox-container">
           <input class="checkbox" id="autoPauseAfterWork" type="checkbox" />
           auto pause after work
         </label>
@@ -76,7 +97,7 @@
         <label class="checkbox-container">
           <input class="checkbox" id="soundOnNotification" type="checkbox" />
           sound on notification
-        </label>
+        </label> -->
       </section>
     </form>
 

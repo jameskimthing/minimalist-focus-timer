@@ -45,10 +45,10 @@
   updateCheckbox(pauseAfterWork, true, "sessionAutoPauseAfterWork");
   updateCheckbox(pauseAfterBreak, true, "sessionAutoPauseAfterBreak");
   updateCheckbox(soundOnNotification, true, "soundOnNotification");
-  updateCheckbox(stepsByFive, 5, "sessionInputRangeStep", () => {
-    stepsByFive.getAttribute("checked")
-      ? (SETTINGS.sessionInputRangeStep = 1)
-      : (SETTINGS.sessionInputRangeStep = 5);
+  updateCheckbox(stepsByFive, 5, "sessionInputRangeStep", (checked) => {
+    checked == "true"
+      ? (SETTINGS.sessionInputRangeStep = 5)
+      : (SETTINGS.sessionInputRangeStep = 1);
     updateRangeInputSteps();
   });
   if (SETTINGS.sessionInputRangeStep === 5) updateRangeInputSteps();
@@ -66,12 +66,10 @@
     if (SETTINGS[settingsAttribute] === checkedValue) {
       element.setAttribute("checked", "true");
     }
-    element.addEventListener("click", async () => {
-      if (onClick) onClick(element);
-      else SETTINGS[settingsAttribute] = !SETTINGS[settingsAttribute];
-      element.getAttribute("checked")
-        ? element.removeAttribute("checked")
-        : element.setAttribute("checked", "true");
+    element.addEventListener("checkbox-input", async (event) => {
+      onClick
+        ? onClick(event.detail.value)
+        : (SETTINGS[settingsAttribute] = !SETTINGS[settingsAttribute]);
       sendMessage("update_settings", SETTINGS);
     });
   }
