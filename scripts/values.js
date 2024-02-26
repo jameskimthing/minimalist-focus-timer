@@ -2,6 +2,17 @@
 const TIMER_PADDING = 990;
 const ANGLE_DIFF_GENERATE_ICON = 5;
 
+/** @type {"firefox" | "chrome" | "unknown"} */
+let BROWSER = "unknown";
+if (typeof browser !== "undefined" && typeof browser.runtime !== "undefined") {
+  BROWSER = "firefox";
+} else if (
+  typeof chrome !== "undefined" &&
+  typeof chrome.runtime !== "undefined"
+) {
+  BROWSER = "chrome";
+}
+
 const SETTINGS = {
   sessionRounds: 4,
   sessionInputRangeStep: 1,

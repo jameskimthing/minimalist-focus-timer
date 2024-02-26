@@ -30,6 +30,7 @@
 
 - 0 Dependencies!
 - ES6 Javascript, HTML5, CSS3
+- Copy && Paste `manifest_chrome.json` or `manifest_firefox.json` to `manifest.json` whenever necessary. This is the only manual step needed for development, and thus I thought a build step would be unnecessarily complex for such a simple task.
 
 ## Credits
 

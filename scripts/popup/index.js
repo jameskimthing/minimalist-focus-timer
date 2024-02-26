@@ -52,8 +52,9 @@ function adjustUiToState(timeLeft) {
 // EVENTS MESSAGES -----------------------------------------------------------------------------------------------------------------
 // ---------------------------------------------------------------------------------------------------------------------------------
 // message = { action, content }
-chrome.runtime.onMessage.addListener(receiveMessageFromBackground);
-function receiveMessageFromBackground(message, sender, sendResponse) {
+if (BROWSER == "chrome") chrome.runtime.onMessage.addListener(receiveMessage);
+if (BROWSER == "firefox") browser.runtime.onMessage.addListener(receiveMessage);
+function receiveMessage(message, sender, sendResponse) {
   if (message.target !== "popup") return;
   console.log(`[popup] received message with action ${message.action}`);
 

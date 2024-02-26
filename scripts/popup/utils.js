@@ -13,10 +13,17 @@ async function sendMessage(action, content, target = "background") {
   const message = { action, content, target };
   console.log("[popup] sending message to", target, "with action", action);
 
-  return new Promise((resolve, reject) => {
-    chrome.runtime.sendMessage(message, (response) => {
-      if (chrome.runtime.lastError) {
-        reject(new Error(chrome.runtime.lastError.message));
+  let browserHere;
+  if (BROWSER == "chrome") {
+    browserHere = chrome;
+  } else if (BROWSER == "firefox") {
+    browserHere = browser;
+  }
+
+  return await new Promise((resolve, reject) => {
+    browserHere.runtime.sendMessage(message, (response) => {
+      if (browserHere.runtime.lastError) {
+        reject(new Error(browserHere.runtime.lastError.message));
       } else {
         resolve(response);
       }

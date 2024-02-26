@@ -1,4 +1,8 @@
 // ---------------------------------------------------------------------------------------------------------------------------------
+// ONLY USED IN CHROME -------------------------------------------------------------------------------------------------------------
+// ---------------------------------------------------------------------------------------------------------------------------------
+
+// ---------------------------------------------------------------------------------------------------------------------------------
 // KEEP BACKGROUND SERVICE WORKER ALIVE --------------------------------------------------------------------------------------------
 // ---------------------------------------------------------------------------------------------------------------------------------
 setInterval(async () => sendMessage("keep_alive", "", "background"), 20e3);
@@ -6,8 +10,9 @@ setInterval(async () => sendMessage("keep_alive", "", "background"), 20e3);
 // ---------------------------------------------------------------------------------------------------------------------------------
 // LISTEN TO MESSAGES --------------------------------------------------------------------------------------------------------------
 // ---------------------------------------------------------------------------------------------------------------------------------
-chrome.runtime.onMessage.addListener(receiveMessageFromBackground);
-function receiveMessageFromBackground(message, sender, sendResponse) {
+if (BROWSER == "chrome") chrome.runtime.onMessage.addListener(receiveMessage);
+if (BROWSER == "firefox") browser.runtime.onMessage.addListener(receiveMessage);
+function receiveMessage(message, sender, sendResponse) {
   if (message.target !== "offscreen") return;
 
   (async () => {
@@ -63,6 +68,7 @@ async function sendMessage(action, content, target = "background") {
   const message = { action, content, target };
   console.log("[popup] sending message to", target, "with action", action);
 
+  // no need to think of sending in firefox env, as that is not
   return new Promise((resolve, reject) => {
     chrome.runtime.sendMessage(message, (response) => {
       if (chrome.runtime.lastError) {

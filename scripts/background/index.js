@@ -94,8 +94,8 @@ setInterval(() => {
 // ---------------------------------------------------------------------------------------------------------------------------------
 // EVENTS MESSAGES -----------------------------------------------------------------------------------------------------------------
 // ---------------------------------------------------------------------------------------------------------------------------------
-// message = { action, content }
-chrome.runtime.onMessage.addListener(receiveMessage);
+if (BROWSER == "chrome") chrome.runtime.onMessage.addListener(receiveMessage);
+if (BROWSER == "firefox") browser.runtime.onMessage.addListener(receiveMessage);
 function receiveMessage(message, sender, sendResponse) {
   if (message.target !== "background") return;
 

@@ -1,5 +1,5 @@
 let _offscreenMade = false;
-if (!_offscreenMade) {
+if (!_offscreenMade && BROWSER == "chrome") {
   // Doesnt actually need "BLOBS" reason, but is just there so "AUDIO_PLAYBACK" wont be suspended after 30 seconds
   chrome.offscreen.createDocument({
     url: chrome.runtime.getURL("../../html/offscreen.html"),
@@ -12,36 +12,44 @@ if (!_offscreenMade) {
 // ---------------------------------------------------------------------------------------------------------------------------------
 // ADJUST CHROME EXTENSION ICON ----------------------------------------------------------------------------------------------------
 // ---------------------------------------------------------------------------------------------------------------------------------
-let lastGenerated = "";
+let lastGenerated = "default:" + STATE.color;
 let lastAngle = "";
 async function adjustExtensionIcon(timeLeft) {
   if (STATE.isPaused) {
     // Default Icon
     if (lastGenerated === "default:" + STATE.color) return;
-
-    const image = await sendMessage(
-      "generate_extension_default_icon",
-      { color: STATE.color, size: 32 },
-      "offscreen"
-    );
-    chrome.action.setIcon({ path: image });
-
     lastGenerated = "default:" + STATE.color;
+
+    if (BROWSER == "chrome") {
+      const image = await sendMessage(
+        "generate_extension_default_icon",
+        { color: STATE.color, size: 32 },
+        "offscreen"
+      );
+      chrome.action.setIcon({ path: image });
+    } else if (BROWSER == "firefox") {
+      const image = await generateExtensionDefaultIcon(STATE.color, 32);
+      browser.browserAction.setIcon({ path: { 32: image } });
+    }
   } else {
     // Pie Icon
     const angle = (timeLeft / STATE.sessionLength) * 360;
     const smallChange = Math.abs(lastAngle - angle) < ANGLE_DIFF_GENERATE_ICON;
     if (lastGenerated === "pie:" + STATE.color && smallChange) return;
-
-    const image = await sendMessage(
-      "generate_extension_pie_icon",
-      { iconAngle: angle, color: STATE.color },
-      "offscreen"
-    );
-    chrome.action.setIcon({ path: image });
-
     lastAngle = angle;
     lastGenerated = "pie:" + STATE.color;
+
+    if (BROWSER == "chrome") {
+      const image = await sendMessage(
+        "generate_extension_pie_icon",
+        { iconAngle: angle, color: STATE.color },
+        "offscreen"
+      );
+      chrome.action.setIcon({ path: image });
+    } else if (BROWSER == "firefox") {
+      const image = await generateExtensionPieIcon(angle, STATE.color, 32);
+      browser.browserAction.setIcon({ path: { 32: image } });
+    }
   }
 }
 
@@ -60,11 +68,18 @@ async function sendMessage(action, content, target = "popup") {
   const message = { action, content, target };
   console.log("[background] sending message to", target, "with action", action);
 
+  let browserHere;
+  if (BROWSER == "chrome") {
+    browserHere = chrome;
+  } else if (BROWSER == "firefox") {
+    browserHere = browser;
+  }
+
   try {
     return await new Promise((resolve, reject) => {
-      chrome.runtime.sendMessage(message, (response) => {
-        if (chrome.runtime.lastError) {
-          reject(new Error(chrome.runtime.lastError.message));
+      browserHere.runtime.sendMessage(message, (response) => {
+        if (browserHere.runtime.lastError) {
+          reject(new Error(browserHere.runtime.lastError.message));
         } else {
           resolve(response);
         }
@@ -74,7 +89,13 @@ async function sendMessage(action, content, target = "popup") {
     // Error only when popup not open; no error when popup open
     const popupNotOpenError =
       "The message port closed before a response was received.";
-    if (e.message.includes(popupNotOpenError)) return;
+    const popupNotOpenError2 =
+      "Could not establish connection. Receiving end does not exist.";
+    if (
+      e.message.includes(popupNotOpenError) ||
+      e.message.includes(popupNotOpenError2)
+    )
+      return;
     throw e;
   }
 }
@@ -89,56 +110,79 @@ async function sendMessage(action, content, target = "popup") {
  * @param {string} options.message The message body of the notification.
  */
 async function pushNotification(options) {
-  const image = await sendMessage(
-    "generate_extension_default_icon",
-    { color: STATE.color, size: 128 },
-    "offscreen"
-  );
+  let image;
 
-  if (SETTINGS.soundOnNotification) {
-    sendMessage(
-      "play_audio",
-      "../../assets/sounds/notification.mp3",
+  if (BROWSER == "chrome") {
+    image = await sendMessage(
+      "generate_extension_default_icon",
+      { color: STATE.color, size: 128 },
       "offscreen"
     );
+  } else if (BROWSER == "firefox") {
+    image = await generateExtensionDefaultIcon(STATE.color, 128);
   }
-  chrome.notifications.create(
-    "",
-    {
-      type: "basic",
-      title: options.title,
-      iconUrl: image,
-      message: options.message,
-    },
-    (_) => {}
-  );
+
+  // Play sound
+  if (SETTINGS.soundOnNotification) {
+    if (BROWSER == "chrome") {
+      sendMessage(
+        "play_audio",
+        "../../assets/sounds/notification.mp3",
+        "offscreen"
+      );
+    } else if (BROWSER == "firefox") {
+      const audio = new Audio("/assets/sounds/notification.mp3");
+      audio.play();
+    }
+  }
+
+  // Push Notification
+  const notificationMessage = {
+    type: "basic",
+    iconUrl: image,
+    title: options.title,
+    message: options.message,
+  };
+  if (BROWSER == "chrome") {
+    chrome.notifications.create("", notificationMessage, (_) => {});
+  } else if (BROWSER == "firefox") {
+    browser.notifications.create(notificationMessage);
+  }
 }
 
 // ---------------------------------------------------------------------------------------------------------------------------------
-// USING chrome.storage.local ------------------------------------------------------------------------------------------------------
+// STORAGE -------------------------------------------------------------------------------------------------------------------------
 // ---------------------------------------------------------------------------------------------------------------------------------
 async function setStorage(key, value) {
-  return new Promise((resolve, reject) => {
-    chrome.storage.local.set({ [key]: value }, () => {
-      if (chrome.runtime.lastError) {
-        reject(chrome.runtime.lastError);
-      } else {
-        resolve();
-      }
+  if (BROWSER == "chrome") {
+    return new Promise((resolve, reject) => {
+      chrome.storage.local.set({ [key]: value }, () => {
+        if (chrome.runtime.lastError) {
+          reject(chrome.runtime.lastError);
+        } else {
+          resolve();
+        }
+      });
     });
-  });
+  } else if (BROWSER == "firefox") {
+    return await browser.storage.local.set({ [key]: value });
+  }
 }
 
-function getStorage(key) {
-  return new Promise((resolve, reject) => {
-    chrome.storage.local.get([key], (result) => {
-      if (chrome.runtime.lastError) {
-        reject(chrome.runtime.lastError);
-      } else {
-        resolve(result[key]);
-      }
+async function getStorage(key) {
+  if (BROWSER == "chrome") {
+    return new Promise((resolve, reject) => {
+      chrome.storage.local.get([key], (result) => {
+        if (chrome.runtime.lastError) {
+          reject(chrome.runtime.lastError);
+        } else {
+          resolve(result[key]);
+        }
+      });
     });
-  });
+  } else if (BROWSER == "firefox") {
+    return await browser.storage.local.get(key);
+  }
 }
 
 // ---------------------------------------------------------------------------------------------------------------------------------
