@@ -18,11 +18,11 @@
 - A soft reset button (redo current round)
 - A "skip timer" button (move to next session)
 - Tooltip on buttons that explains what they do
+- Toggle the push notification sound
 
 ## Features to Come
 
 - Customizable colors
-- Ability to toggle the push notification, and the sound
 - A "raining sound" in the background (toggleable)
 - Firefox
 
