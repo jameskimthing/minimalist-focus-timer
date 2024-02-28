@@ -65,6 +65,7 @@ async function adjustExtensionIcon(timeLeft) {
  * @param {"popup" | "offscreen"} target
  */
 async function sendMessage(action, content, target = "popup") {
+  content = JSON.parse(JSON.stringify(content));
   for (const key in content) {
     if (typeof content[key] === "function") {
       delete content[key];
