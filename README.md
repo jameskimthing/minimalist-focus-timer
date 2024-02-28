@@ -1,14 +1,14 @@
-<h1 align="center">Pomodoro Focus Timer</h1>
+<h1 align="center">Minimalist Focus Timer</h1>
 
-<p align="center">A minimalistic pomodoro timer as a chrome extension</p>
+<p align="center">A Clean and Concise Timer for Productivity</p>
 
-![Pomodoro Timer](/assets/readme/pomodoro_extension.png)
+![Pomodoro Timer](/assets/readme/focus_extension.png)
 
 <p align="center">You can get it <a href="https://chromewebstore.google.com/detail/pomodoro-focus-timer/eglbnllngiannimbjimkpjklnjgelnoi" target="_blank">here</a></p>
 
 ## Features
 
-- A timer that runs in the background:
+- A timer based on the pomodoro technique that runs in the background:
   - Pushes a notification with a simple sound when it is time to take a break or continue working
   - Dynamic extension icon that adjusts as a "pie icon" relative to the current progress of the session
   - Changes the color of the extension icon and popup based on the current session type (focusing / break / long break)

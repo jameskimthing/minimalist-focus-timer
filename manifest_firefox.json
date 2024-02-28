@@ -1,8 +1,8 @@
 {
     "manifest_version": 2,
-    "name": "Pomodoro Focus Timer",
-    "description": "A Minimalist Pomodoro Timer",
-    "version": "0.9.1",
+    "name": "Minimalist Focus Timer",
+    "description": "A Clean and Concise Timer Using the Pomodoro Technique",
+    "version": "0.9.3",
     "background": {
         "page": "html/background.html"
     },
