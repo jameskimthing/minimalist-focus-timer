@@ -54,6 +54,7 @@ setInterval(() => {
   if (timeLeft <= 0 && !STATE.isFinished) {
     switch (STATE.sessionType) {
       case "WORK":
+        STATE.isPaused = SETTINGS.sessionAutoPauseAfterWork;
         if (STATE.sessionRound >= SETTINGS.sessionRounds) {
           STATE.sessionType = "LONG_BREAK";
           pushNotification({
@@ -69,6 +70,7 @@ setInterval(() => {
         }
         break;
       case "BREAK":
+        STATE.isPaused = SETTINGS.sessionAutoPauseAfterBreak;
         STATE.sessionType = "WORK";
         STATE.sessionRound++;
         pushNotification({

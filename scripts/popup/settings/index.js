@@ -7,6 +7,6 @@ let INITIALIZED = false;
 
 async function ensureInitialized() {
   while (!INITIALIZED) {
-    await new Promise((resolve) => setTimeout(resolve, 10));
+    await new Promise((resolve) => setTimeout(resolve, 5));
   }
 }
