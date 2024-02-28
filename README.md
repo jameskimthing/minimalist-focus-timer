@@ -4,7 +4,7 @@
 
 ![Pomodoro Timer](/assets/readme/focus_extension.png)
 
-<p align="center">You can get it <a href="https://chromewebstore.google.com/detail/pomodoro-focus-timer/eglbnllngiannimbjimkpjklnjgelnoi" target="_blank">here</a></p>
+<p align="center">You can get at the <a href="https://chromewebstore.google.com/detail/pomodoro-focus-timer/eglbnllngiannimbjimkpjklnjgelnoi" target="_blank">chrome web store</a> or the <a target="_blank" href="https://addons.mozilla.org/en-US/firefox/addon/minimalist-focus-timer/">firefox add-on store</a></p>
 
 ## Features
 
