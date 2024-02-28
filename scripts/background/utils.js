@@ -65,6 +65,12 @@ async function adjustExtensionIcon(timeLeft) {
  * @param {"popup" | "offscreen"} target
  */
 async function sendMessage(action, content, target = "popup") {
+  for (const key in content) {
+    if (typeof content[key] === "function") {
+      delete content[key];
+    }
+  }
+
   const message = { action, content, target };
   console.log("[background] sending message to", target, "with action", action);
 
