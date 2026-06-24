@@ -63,3 +63,14 @@ function durationToString(duration, options = { isVerbose: false }) {
     return parts.join(" : ");
   }
 }
+
+// Added: helper functions for conversion from minutes to milliseconds - more readability
+function minToMilliseconds(duration){
+  return duration * 60 * 1000 / TIMER_PADDING;
+}
+
+// Added: helper func for conversion from milliseconds to minutes
+function millisecondToMinutes(duration){
+  return (duration - TIMER_PADDING) / (60*1000);
+}
+

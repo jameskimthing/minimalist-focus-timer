@@ -13,15 +13,24 @@ if (typeof browser !== "undefined" && typeof browser.runtime !== "undefined") {
   BROWSER = "chrome";
 }
 
+// Added: mapping session ids - just an idea ;)
+const sessionsToLocalStorage = {
+  "rangeWorkLength": "focus-value",
+  "rangeBreakLength": "break-value",
+  "rangeLongBreakLength": "long-break-value",
+  "rangeRounds": "rounds-value"
+}
+
+// Updated: Loading session lengths and rounds from localstorage, otherwise use default
 const SETTINGS = {
-  sessionRounds: 4,
+  sessionRounds: localStorage.getItem("rounds-value") || 4,
   sessionInputRangeStep: 1,
   sessionAutoPauseAfterWork: true,
   sessionAutoPauseAfterBreak: true,
   sessionLength: {
-    WORK: 25 * 60 * 1000 + TIMER_PADDING,
-    BREAK: 5 * 60 * 1000 + TIMER_PADDING,
-    LONG_BREAK: 15 * 60 * 1000 + TIMER_PADDING,
+    WORK: (localStorage.getItem("focus-value") || 25) * 60 * 1000 + TIMER_PADDING,
+    BREAK: (localStorage.getItem("break-value") || 5) * 60 * 1000 + TIMER_PADDING,
+    LONG_BREAK: (localStorage.getItem("long-break-value") || 15) * 60 * 1000 + TIMER_PADDING,
   },
   colors: {
     background: "#2E4057",
@@ -52,10 +61,10 @@ const STATE = {
   get color() {
     return SETTINGS.colors[this.sessionType];
   },
-  set sessionLength(_) {},
-  set color(_) {},
+  set sessionLength(_) { },
+  set color(_) { },
 
-  softReset: function () {
+  softReset: function() {
     this.startTime = Date.now();
     this.totalPausedDuration = 0;
     this.storedPausedDuration = 0;
@@ -66,7 +75,7 @@ const STATE = {
       : (this.pauseStartTime = Date.now());
   },
 
-  hardReset: function () {
+  hardReset: function() {
     this.softReset();
     this.isPaused = true;
     this.sessionType = "WORK";
@@ -74,3 +83,4 @@ const STATE = {
     this.isFinished = false;
   },
 };
+

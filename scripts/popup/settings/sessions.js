@@ -5,34 +5,39 @@
   // ---------------------------------------------------------------------------------------------------------------------------------
   // RANGE INPUTS --------------------------------------------------------------------------------------------------------------------
   // ---------------------------------------------------------------------------------------------------------------------------------
-  const rangeWorkLength = document.getElementById("rangeWorkLength");
-  const rangeBreakLength = document.getElementById("rangeBreakLength");
-  const rangeLongBreakLength = document.getElementById("rangeLongBreakLength");
-  const rangeRounds = document.getElementById("rangeRounds");
+  
 
-  updateRangeInput(rangeWorkLength);
-  updateRangeInput(rangeBreakLength);
-  updateRangeInput(rangeLongBreakLength);
-  updateRangeInput(rangeRounds);
+  // Deleted: Thought about handling all component logic inside the component
+  // const rangeWorkLength = document.getElementById("rangeWorkLength");
+  // const rangeBreakLength = document.getElementById("rangeBreakLength");
+  // const rangeLongBreakLength = document.getElementById("rangeLongBreakLength");
+  // const rangeRounds = document.getElementById("rangeRounds");
+  //
+  // updateRangeInput(rangeWorkLength);
+  // updateRangeInput(rangeBreakLength);
+  // updateRangeInput(rangeLongBreakLength);
+  // updateRangeInput(rangeRounds);
+  //
+
 
   // FUNCTIONS -----------------------------------------------------------------------------------------------------------------------
-  function updateRangeInput(element) {
-    const type = element.getAttribute("type");
-    const key = element.getAttribute("key");
-
-    const val = (SETTINGS.sessionLength[key] - TIMER_PADDING) / 60 / 1000;
-    type === "mins"
-      ? element.setAttribute("value", val)
-      : element.setAttribute("value", SETTINGS[key]);
-
-    element.addEventListener("range-input", (event) => {
-      const val = event.detail.value * 60 * 1000 + TIMER_PADDING;
-      type === "mins"
-        ? (SETTINGS.sessionLength[key] = val)
-        : (SETTINGS[key] = event.detail.value);
-      sendMessage("update_settings", SETTINGS);
-    });
-  }
+  // function updateRangeInput(element) {
+  //   const type = element.getAttribute("type");
+  //   const key = element.getAttribute("key");
+  //
+  //   const val = (SETTINGS.sessionLength[key] - TIMER_PADDING) / 60 / 1000;
+  //   type === "mins"
+  //     ? element.setAttribute("value", val)
+  //     : element.setAttribute("value", SETTINGS[key]);
+  //
+  //   element.addEventListener("range-input", (event) => {
+  //     const val = event.detail.value * 60 * 1000 + TIMER_PADDING;
+  //     type === "mins"
+  //       ? (SETTINGS.sessionLength[key] = val)
+  //       : (SETTINGS[key] = event.detail.value);
+  //     sendMessage("update_settings", SETTINGS);
+  //   });
+  // }
 
   // ---------------------------------------------------------------------------------------------------------------------------------
   // CHECKBOXES ----------------------------------------------------------------------------------------------------------------------

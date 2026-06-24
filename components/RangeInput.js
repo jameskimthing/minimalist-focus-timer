@@ -1,13 +1,10 @@
 class RangeInput extends HTMLElement {
+
   constructor() {
     super();
     this.attachShadow({ mode: "open" });
 
-    const name = this.getAttribute("name");
-
-    const max = this.getAttribute("max") || 100;
-    const step = this.getAttribute("step") || 1;
-    const value = this.getAttribute("value");
+    this.loadSettingsData();
 
     this.shadowRoot.innerHTML = `
       <style>
@@ -62,47 +59,80 @@ class RangeInput extends HTMLElement {
     
       <div class="settings-slider-wrapper">
         <div class="settings-slider-info-wrapper">
-          <span name="inputInfoName">${name}</span>
+          <span name="inputInfoName">${this.name}</span>
           <span name="inputInfoValue"></span>
         </div>
-        <input type="range" name="sessionLength" min="0" max="${max}" step="${step}">
+        <input type="range" name="sessionLength" min="0" max="${this.max}" step="${this.step}">
       </div>`;
 
-    this.updateSettingsSlider();
     const input = this.shadowRoot.querySelector("input");
-    if (value) input.value = value;
 
-    input.addEventListener("input", async () => {
+    this.setSettingsSlider();
+
+    input.addEventListener("input", async (event) => {
       this.updateSettingsSlider();
+    
+      // Update settings 
+      const val = event.currentTarget.value * 60 * 1000 + TIMER_PADDING;
+      this.type === "mins"
+        ? (SETTINGS.sessionLength[this.key] = val)
+        : (SETTINGS[this.key] = event.currentTarget.value);
+      
+      localStorage.setItem(sessionsToLocalStorage[this.id], event.currentTarget.value);
+      
+      sendMessage("update_settings", SETTINGS);
     });
+
   }
 
+  // Added: Loading all variables in one place
+  loadSettingsData() {
+    this.id = this.getAttribute("id");
+    this.key = this.getAttribute("key");
+    this.name = this.getAttribute("name");
+    this.step = this.getAttribute("step") || 1;
+    this.type = this.getAttribute("type") || "mins";
+    this.value = this.getAttribute("value") || (this.type==="mins")?SETTINGS.sessionLength[this.key]:SETTINGS.sessionRounds;
+    this.max = this.getAttribute("max") || 100;
+  }
+
+  // Updated: update slider settings, when the component is already loaded
   updateSettingsSlider() {
-    const step = this.getAttribute("step") || 1;
-    const type = this.getAttribute("type") || "mins";
     const inputInfoValue = this.shadowRoot.querySelector(
       'span[name="inputInfoValue"]'
     );
 
     const slider = this.shadowRoot.querySelector("input");
-    slider.step = step;
     const sliderValue = Math.max(slider.value, 1);
 
-    if (type === "mins") {
+    if (this.type === "mins") {
       const value = sliderValue * 60 * 1000 + TIMER_PADDING;
       inputInfoValue.innerText = durationToString(value, { isVerbose: true });
     } else {
       const innerText = `${sliderValue} round${sliderValue > 1 ? "s" : ""}`;
       inputInfoValue.innerText = innerText;
     }
+  }
 
-    this.dispatchEvent(
-      new CustomEvent("range-input", {
-        bubbles: true,
-        composed: true,
-        detail: { value: Math.max(1, slider.value) },
-      })
+  // Added: update slider settings when the component is loading 
+  setSettingsSlider() {
+    const inputInfoValue = this.shadowRoot.querySelector(
+      'span[name="inputInfoValue"]'
     );
+
+    const slider = this.shadowRoot.querySelector("input");
+    slider.step = this.step;
+
+    if (this.type === "mins") {
+      const sliderValue = Math.max(SETTINGS.sessionLength[this.key], 1);
+      slider.value = millisecondToMinutes(sliderValue);
+      inputInfoValue.innerText = durationToString(sliderValue, { isVerbose: true });
+    } else {
+      const sliderValue = Math.max(SETTINGS.sessionRounds, 1);
+      slider.value = sliderValue;
+      const innerText = `${sliderValue} round${sliderValue > 1 ? "s" : ""}`;
+      inputInfoValue.innerText = innerText;
+    }
   }
 
   static get observedAttributes() {
@@ -119,3 +149,5 @@ class RangeInput extends HTMLElement {
 }
 
 customElements.define("range-input", RangeInput);
+
+

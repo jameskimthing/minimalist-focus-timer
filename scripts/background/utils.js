@@ -1,3 +1,4 @@
+
 let _offscreenMade = false;
 if (!_offscreenMade && BROWSER == "chrome") {
   // Doesnt actually need "BLOBS" reason, but is just there so "AUDIO_PLAYBACK" wont be suspended after 30 seconds
@@ -224,3 +225,4 @@ function durationToString(duration, options = { isVerbose: true }) {
     return parts.join(" : ");
   }
 }
+
